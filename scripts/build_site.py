@@ -34,11 +34,11 @@ NAMES = {"1a": "Poisson, manufactured", "1b": "Poisson, multiscale", "1c": "Pois
          "convdiff": "Conv.–diff., periodic pulse", "darcy": "Darcy flow", "poisson": "Poisson, random forcing",
          "helmholtz": "Helmholtz", "ns": "Navier–Stokes vorticity", "kolmogorov": "Kolmogorov flow",
          "allen_cahn": "Allen–Cahn", "burgers2d": "Stochastic Burgers 2-D", "adr": "Adv.–diff.–reaction",
-         "elliptic4d": "Elliptic 4-D"}
+         "elliptic4d": "Elliptic equation"}
 EQUATIONS = ["Poisson", "heat", "convection–diffusion", "Burgers", "2-D wave", "fractional ODE",
              "time-fractional diffusion", "multi-term fractional", "variable-order fractional", "Kuramoto–Sivashinsky",
              "Navier–Stokes", "Kolmogorov flow", "Cahn–Hilliard", "Allen–Cahn", "Maxwell TE_z", "time-harmonic EM",
-             "Darcy flow", "Helmholtz", "stochastic Burgers 2-D", "advection–diffusion–reaction", "4-D elliptic"]
+             "Darcy flow", "Helmholtz", "stochastic Burgers 2-D", "advection–diffusion–reaction", "elliptic equation"]
 EARLIER = [
     ["Problems 1–11 (20 cases)", "Opus 5.5", "19.7 · $1.6", "20.0 · $18.9", "19.3 · $1.9", "20.0 · $14.9", "19.7 · $6.3 (Claude Code)"],
     ["Problems 1–11 (20 cases)", "GPT-5.5", "7.7 · $0.4", "9.7 · $17.8", "3.3 · $0.4", "11.0 · $12.2", "12.0 · $14.9 (Codex)"],
