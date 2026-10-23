@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>RSI-PDE Bench</title>
-<meta name="description" content="RSI-PDE Bench: a benchmark of recursive self-improvement harnesses that write PDE solvers, scored on a hidden test split.">
+<title>RSI-PDEbench</title>
+<meta name="description" content="RSI-PDEbench: a benchmark of recursive self-improvement harnesses that write PDE solvers, scored on a hidden test split.">
 <style>
 :root {
   color-scheme: light;
@@ -117,9 +117,9 @@ footer { padding: 36px 0 60px; color: var(--muted); font-size: 14px; border-top:
 </head>
 <body>
 <header class="top"><div class="wrap">
-  <a class="brand" href="#">RSI-PDE Bench</a>
+  <a class="brand" href="#">RSI-PDEbench</a>
   <nav>
-    <a href="#measure">What it measures</a><a href="#run">How a run works</a><a href="#tracks">Tracks</a>
+    <a href="#measure">What it measures</a><a href="#run">How a run works</a><a href="#tracks">Problems</a>
     <a href="#calibration">Calibration</a><a href="#results">Results</a><a href="#start">Get started</a>
   </nav>
   <button class="theme" id="theme" type="button" aria-label="Toggle colour theme">Theme</button>
@@ -129,7 +129,7 @@ footer { padding: 36px 0 60px; color: var(--muted); font-size: 14px; border-top:
 <div class="wrap hero">
   <div class="eyebrow">Recursive self-improvement on scientific code</div>
   <h1>Can a self-improving agent write PDE solvers that generalize?</h1>
-  <p class="lede">RSI-PDE Bench gives a self-improvement harness one foundation model, a fixed budget and a set of
+  <p class="lede">RSI-PDEbench gives a self-improvement harness one foundation model, a fixed budget and a set of
     identify-then-solve PDE cases. The harness must turn feedback into a solver program. That solver is then scored,
     after every round, on a hidden test split that no run ever sees.</p>
   <div class="cta">
@@ -190,11 +190,13 @@ footer { padding: 36px 0 60px; color: var(--muted); font-size: 14px; border-top:
 </div></section>
 
 <section id="tracks"><div class="wrap">
-  <h2>Tracks</h2>
-  <p class="sub">There are three tracks with 42 problem templates. Every template appears once in training, once in
-    validation and five times in the hidden test. The numbers come from a seeded generator, so the three splits
-    share one distribution.</p>
+  <h2>What's in RSI-PDEbench</h2>
+  <p class="sub">There are 42 problem templates. They range from scalar diffusion, transport and fractional
+    problems, through chaotic, incompressible, phase-field and electromagnetic systems, to data-driven problems
+    whose inputs are real fields. Every template appears once in training, once in validation and five times in the
+    hidden test. One seeded generator makes all of them, so the splits share one distribution.</p>
   <div class="grid3" id="trackcards"></div>
+  <div class="card" style="margin-top:14px"><div class="k">EQUATIONS</div><div class="chips" id="equations"></div></div>
 </div></section>
 
 <section id="calibration"><div class="wrap">
@@ -205,16 +207,17 @@ footer { padding: 36px 0 60px; color: var(--muted); font-size: 14px; border-top:
   <div class="panel">
     <div class="toolbar"><div class="legend" id="callegend"></div><div class="seg" data-target="cal"><button aria-pressed="true" data-view="chart">Chart</button><button aria-pressed="false" data-view="table">Table</button></div></div>
     <figure><div id="calchart"></div><div id="caltable" class="scroll" hidden></div>
-    <figcaption>The pass rate over all variants of the 1001-case release, for each probe solver. tex covers
-      pde_benchmarks.tex Problems 1–11 (400 cases); inventory covers the PDE Data Inventory families (240 cases).</figcaption></figure>
+    <figcaption>The pass rate of each probe solver over all variants of the calibrated templates. The 10
+      templates of Problems 12–16 had no earlier solver, so the baseline runs calibrate them.</figcaption></figure>
   </div>
   <h3>Where the headroom is</h3>
   <div class="panel">
-    <div class="toolbar"><div class="seg" id="hmtrack"><button aria-pressed="true" data-track="tex">tex</button><button aria-pressed="false" data-track="inventory">inventory</button></div><div class="seg" data-target="hm"><button aria-pressed="true" data-view="chart">Chart</button><button aria-pressed="false" data-view="table">Table</button></div></div>
+    <div class="toolbar"><div></div><div class="seg" data-target="hm"><button aria-pressed="true" data-view="chart">Chart</button><button aria-pressed="false" data-view="table">Table</button></div></div>
     <figure><div id="hmchart" class="scroll"></div><div id="hmtable" class="scroll" hidden></div>
     <div class="legend" id="hmkey" style="margin-top:10px"></div>
-    <figcaption>The pass rate per template and probe, on the colour scale above. Hover over a cell for its value. The hardened bench templates are tex 3b, 3c, 6, 9 and 11, and inventory Gaussian Burgers and
-      Helmholtz.</figcaption></figure>
+    <figcaption>The pass rate per template and probe, on the colour scale above, hardest templates first. Hover
+      over a cell for its value. Templates marked * have harder numbers in the benchmark, because every strong probe
+      solved all their calibration variants.</figcaption></figure>
   </div>
 </div></section>
 
@@ -222,18 +225,19 @@ footer { padding: 36px 0 60px; color: var(--muted); font-size: 14px; border-top:
   <h2>Baseline results</h2>
   <p class="sub" id="resultsub"></p>
   <div class="panel" id="curvepanel" hidden>
-    <div class="toolbar"><div class="legend" id="curvelegend"></div><div class="seg" id="curvetrack"></div></div>
+    <div class="toolbar"><div class="legend" id="curvelegend"></div></div>
     <figure><div id="curvechart"></div>
-    <figcaption>The held-out pass rate of the retained solver after each validation round, one line per entrant. A
-      single run makes one model call and has no rounds; it is shown as a dot at round 0.</figcaption></figure>
+    <figcaption>The held-out pass rate over all scored hidden cases, by validation round. An entrant
+      works on the templates in parallel sub-runs; after round k, each sub-run contributes the solver it retained after
+      k rounds, or its final solver. The lines are weighted by hidden cases.</figcaption></figure>
   </div>
   <div class="scroll" style="margin-top:16px"><table id="resulttable"></table></div>
   <h3>Earlier studies</h3>
-  <p class="sub">These are the harness v2 results of 20 October, on the fresh splits of that time: the mean number
+  <p class="sub">These are the harness v2 results of 20 October, on the hidden splits of that time: the mean number
     of hidden cases passed per run (3 runs each), and the cost per run. Those splits are now retired, because the
     code is public; the bench's hidden test replaces them.</p>
   <div class="scroll"><table id="earlier"></table></div>
-  <p class="sub" style="margin-top:10px;font-size:14px">* As written, the Opus single-run programs for inventory exceeded
+  <p class="sub" style="margin-top:10px;font-size:14px">* As written, the Opus single-run programs for the data-driven problems exceeded
     the 30,000-character limit and scored 0. The values shown are with one rule repair: the rejection message is
     sent back once.</p>
 </div></section>
@@ -245,27 +249,25 @@ footer { padding: 36px 0 60px; color: var(--muted); font-size: 14px; border-top:
 <pre>git clone https://github.com/jeremylu916/RSI-PDE.git &amp;&amp; cd RSI-PDE
 pip install -e .
 export PDE_RSI_PROJECT_ROOT=$PWD   # the code defaults to the original cluster path
-# score a solver on a public split (training or validation)
-rsi-pde-bench-eval solver.py --track tex --split bench-val
-# run a built-in entrant: harness v2, Claude Code or Codex
-python scripts/bench.py run --track tex --entrant pde-rsi-v2 --model opus55 --cores 0,1 --output runs/bench-v1-tex-...
+# run a built-in entrant on all 42 templates (harness v2, Claude Code or Codex; six cores, a GPU)
+python scripts/bench.py run --entrant pde-rsi-v2 --model opus55 --cores 0,1,2,3,4,5 --output runs/bench-v1-my-run
 # maintainers: score every round on the hidden test, then build the table
-python scripts/bench.py score --runs runs/bench-v1-* --cores 2,3,4,5
+python scripts/bench.py score --runs runs/bench-v1-my-run --cores 6,7,8,9
 python scripts/bench.py report</pre>
   <div class="grid3" style="margin-top:16px">
     <div class="card"><h4>Specification</h4><p><a href="https://github.com/jeremylu916/RSI-PDE/blob/main/docs/rsi-pde-bench.md">docs/rsi-pde-bench.md</a>: the rules, budget, splits, scoring and calibration.</p></div>
     <div class="card"><h4>Datasheet</h4><p><a href="https://github.com/jeremylu916/RSI-PDE/blob/main/docs/rsi-pde-bench-datasheet.md">Composition, provenance and licence.</a> The DiffusionPDE inputs are CC BY-NC-SA 4.0.</p></div>
-    <div class="card"><h4>Equations</h4><p><a href="https://github.com/jeremylu916/RSI-PDE/blob/main/pde_benchmarks.tex">pde_benchmarks.tex</a> (Problems 1–16) and <a href="https://github.com/jeremylu916/RSI-PDE/blob/main/docs/inventory.md">the inventory suite</a>.</p></div>
+    <div class="card"><h4>Equations</h4><p><a href="https://github.com/jeremylu916/RSI-PDE/blob/main/pde_benchmarks.tex">pde_benchmarks.tex</a> (Problems 1–16) and <a href="https://github.com/jeremylu916/RSI-PDE/blob/main/docs/inventory.md">the data-driven problems</a>.</p></div>
   </div>
 </div></section>
 </main>
 
-<footer><div class="wrap">RSI-PDE · Purdue University · <span id="built"></span>. The public training and validation
+<footer><div class="wrap">RSI-PDEbench · Purdue University · <span id="built"></span>. The public training and validation
   data are also on <a href="https://huggingface.co/datasets/JeremyLu1017/PDE-RSI">Hugging Face</a>.</div></footer>
 <div class="tip" id="tip" role="status" aria-live="polite"></div>
 
 <script>
-const DATA = {"tracks":{"tex":{"title":"pde_benchmarks.tex Problems 1-11","templates":20,"train":20,"val":20,"test":100,"problems":["Poisson","heat","convection\u2013diffusion","Burgers","2-D wave","fractional ODE","Caputo diffusion","multi-term fractional","variable-order fractional"]},"ext":{"title":"pde_benchmarks.tex Problems 12-16","templates":10,"train":10,"val":10,"test":50,"problems":["Kuramoto\u2013Sivashinsky","Navier\u2013Stokes 2-D","Cahn\u2013Hilliard","Maxwell TE_z","time-harmonic EM"]},"inventory":{"title":"PDE Data Inventory","templates":12,"train":12,"val":12,"test":60,"problems":["Burgers (2 IC families)","convection\u2013diffusion","Darcy","Poisson","Helmholtz","Navier\u2013Stokes","Kolmogorov flow","Allen\u2013Cahn","stochastic Burgers 2-D","advection\u2013diffusion\u2013reaction","4-D elliptic"]}},"bench_cases":1001,"budget":[["Improvement wall clock","2 h"],["Model calls","400"],["Prompt tokens (input + cache read + cache write)","40 M"],["Output tokens","600 k"],["Validation submissions","30"],["Solver sandbox","1 core, a GPU share, the case's time limit"]],"probes":[{"key":"v2-rsi-opus55","label":"RSI harness v2 \u00b7 Opus 5.5","short":"RSI Opus","slot":1},{"key":"claude-code-opus55","label":"Claude Code \u00b7 Opus 5.5","short":"Claude Code","slot":2},{"key":"codex-gpt55","label":"Codex \u00b7 GPT-5.5","short":"Codex","slot":3},{"key":"v2-rsi-gpt55","label":"RSI harness v2 \u00b7 GPT-5.5","short":"RSI GPT","slot":4}],"calibration":{"tex":{"v2-rsi-opus55":0.91,"claude-code-opus55":0.8675,"codex-gpt55":0.4975,"v2-rsi-gpt55":0.1875},"inventory":{"v2-rsi-opus55":0.9125,"claude-code-opus55":0.9208333333333333,"codex-gpt55":0.4347222222222222,"v2-rsi-gpt55":0.3541666666666667}},"calibration_cases":{"tex":400,"inventory":240},"templates":{"tex":[{"name":"1a","label":"1a","variants":20,"rates":{"claude-code-opus55":1.0,"codex-gpt55":1.0,"v2-rsi-gpt55":1.0,"v2-rsi-opus55":1.0},"mean":1.0,"hardened":false},{"name":"1b","label":"1b","variants":20,"rates":{"claude-code-opus55":1.0,"codex-gpt55":1.0,"v2-rsi-gpt55":1.0,"v2-rsi-opus55":1.0},"mean":1.0,"hardened":false},{"name":"1c","label":"1c","variants":20,"rates":{"claude-code-opus55":0.4,"codex-gpt55":0.7,"v2-rsi-gpt55":0.75,"v2-rsi-opus55":1.0},"mean":0.7125,"hardened":false},{"name":"2a","label":"2a","variants":20,"rates":{"claude-code-opus55":0.9,"codex-gpt55":0.6,"v2-rsi-gpt55":0.1,"v2-rsi-opus55":0.95},"mean":0.6375,"hardened":false},{"name":"2b","label":"2b","variants":20,"rates":{"claude-code-opus55":0.75,"codex-gpt55":0.6,"v2-rsi-gpt55":0.1,"v2-rsi-opus55":0.8},"mean":0.5625,"hardened":false},{"name":"2c","label":"2c","variants":20,"rates":{"claude-code-opus55":0.85,"codex-gpt55":0.6,"v2-rsi-gpt55":0.0,"v2-rsi-opus55":0.85},"mean":0.575,"hardened":false},{"name":"3a","label":"3a","variants":20,"rates":{"claude-code-opus55":1.0,"codex-gpt55":0.8,"v2-rsi-gpt55":0.0,"v2-rsi-opus55":1.0},"mean":0.7,"hardened":false},{"name":"3b","label":"3b","variants":20,"rates":{"claude-code-opus55":1.0,"codex-gpt55":0.95,"v2-rsi-gpt55":0.05,"v2-rsi-opus55":1.0},"mean":0.75,"hardened":true},{"name":"3c","label":"3c","variants":20,"rates":{"claude-code-opus55":1.0,"codex-gpt55":1.0,"v2-rsi-gpt55":0.05,"v2-rsi-opus55":1.0},"mean":0.7625,"hardened":true},{"name":"3d","label":"3d","variants":20,"rates":{"claude-code-opus55":0.8,"codex-gpt55":0.15,"v2-rsi-gpt55":0.0,"v2-rsi-opus55":0.8},"mean":0.4375,"hardened":false},{"name":"4a","label":"4a","variants":20,"rates":{"claude-code-opus55":1.0,"codex-gpt55":0.4,"v2-rsi-gpt55":0.1,"v2-rsi-opus55":1.0},"mean":0.625,"hardened":false},{"name":"4b","label":"4b","variants":20,"rates":{"claude-code-opus55":0.85,"codex-gpt55":0.0,"v2-rsi-gpt55":0.05,"v2-rsi-opus55":0.7},"mean":0.39999999999999997,"hardened":false},{"name":"4c","label":"4c","variants":20,"rates":{"claude-code-opus55":0.6,"codex-gpt55":0.1,"v2-rsi-gpt55":0.2,"v2-rsi-opus55":1.0},"mean":0.475,"hardened":false},{"name":"5","label":"5","variants":20,"rates":{"claude-code-opus55":0.55,"codex-gpt55":0.55,"v2-rsi-gpt55":0.15,"v2-rsi-opus55":0.55},"mean":0.45,"hardened":false},{"name":"6","label":"6","variants":20,"rates":{"claude-code-opus55":1.0,"codex-gpt55":0.15,"v2-rsi-gpt55":0.2,"v2-rsi-opus55":1.0},"mean":0.5875,"hardened":true},{"name":"7","label":"7","variants":20,"rates":{"claude-code-opus55":0.95,"codex-gpt55":0.7,"v2-rsi-gpt55":0.0,"v2-rsi-opus55":0.9},"mean":0.6375,"hardened":false},{"name":"8","label":"8","variants":20,"rates":{"claude-code-opus55":0.75,"codex-gpt55":0.0,"v2-rsi-gpt55":0.0,"v2-rsi-opus55":0.8},"mean":0.3875,"hardened":false},{"name":"9","label":"9","variants":20,"rates":{"claude-code-opus55":1.0,"codex-gpt55":0.65,"v2-rsi-gpt55":0.0,"v2-rsi-opus55":1.0},"mean":0.6625,"hardened":true},{"name":"10","label":"10","variants":20,"rates":{"claude-code-opus55":0.95,"codex-gpt55":0.0,"v2-rsi-gpt55":0.0,"v2-rsi-opus55":0.9},"mean":0.4625,"hardened":false},{"name":"11","label":"11","variants":20,"rates":{"claude-code-opus55":1.0,"codex-gpt55":0.0,"v2-rsi-gpt55":0.0,"v2-rsi-opus55":0.95},"mean":0.4875,"hardened":true}],"inventory":[{"name":"burgers_gauss","label":"Burgers (Gauss)","variants":20,"rates":{"claude-code-opus55":1.0,"codex-gpt55":0.16666666666666666,"v2-rsi-gpt55":0.2,"v2-rsi-opus55":1.0},"mean":0.5916666666666667,"hardened":true},{"name":"burgers_random","label":"Burgers (rand.)","variants":20,"rates":{"claude-code-opus55":0.9,"codex-gpt55":1.0,"v2-rsi-gpt55":1.0,"v2-rsi-opus55":0.9},"mean":0.95,"hardened":false},{"name":"convdiff","label":"conv.\u2013diff.","variants":20,"rates":{"claude-code-opus55":0.8,"codex-gpt55":0.0,"v2-rsi-gpt55":0.0,"v2-rsi-opus55":0.8},"mean":0.4,"hardened":false},{"name":"darcy","label":"Darcy","variants":20,"rates":{"claude-code-opus55":1.0,"codex-gpt55":0.65,"v2-rsi-gpt55":1.0,"v2-rsi-opus55":1.0},"mean":0.9125,"hardened":false},{"name":"poisson","label":"Poisson","variants":20,"rates":{"claude-code-opus55":1.0,"codex-gpt55":0.65,"v2-rsi-gpt55":1.0,"v2-rsi-opus55":1.0},"mean":0.9125,"hardened":false},{"name":"helmholtz","label":"Helmholtz","variants":20,"rates":{"claude-code-opus55":1.0,"codex-gpt55":0.15,"v2-rsi-gpt55":0.15,"v2-rsi-opus55":1.0},"mean":0.575,"hardened":true},{"name":"ns","label":"Navier\u2013Stokes","variants":20,"rates":{"claude-code-opus55":0.95,"codex-gpt55":0.0,"v2-rsi-gpt55":0.0,"v2-rsi-opus55":0.95},"mean":0.475,"hardened":false},{"name":"kolmogorov","label":"Kolmogorov","variants":20,"rates":{"claude-code-opus55":0.9,"codex-gpt55":0.05,"v2-rsi-gpt55":0.05,"v2-rsi-opus55":0.8},"mean":0.45,"hardened":false},{"name":"allen_cahn","label":"Allen\u2013Cahn","variants":20,"rates":{"claude-code-opus55":0.85,"codex-gpt55":0.55,"v2-rsi-gpt55":0.0,"v2-rsi-opus55":0.85},"mean":0.5625,"hardened":false},{"name":"burgers2d","label":"Burgers 2-D","variants":20,"rates":{"claude-code-opus55":0.9,"codex-gpt55":0.9,"v2-rsi-gpt55":0.55,"v2-rsi-opus55":0.9},"mean":0.8125,"hardened":false},{"name":"adr","label":"ADR","variants":20,"rates":{"claude-code-opus55":0.75,"codex-gpt55":0.1,"v2-rsi-gpt55":0.0,"v2-rsi-opus55":0.75},"mean":0.4,"hardened":false},{"name":"elliptic4d","label":"elliptic 4-D","variants":20,"rates":{"claude-code-opus55":1.0,"codex-gpt55":1.0,"v2-rsi-gpt55":0.3,"v2-rsi-opus55":1.0},"mean":0.825,"hardened":false}]},"entrants":[{"key":"pde-rsi-v2/opus55","label":"RSI v2 \u00b7 Opus","slot":1},{"key":"claude-code/opus55","label":"Claude Code","slot":2},{"key":"codex/gpt55","label":"Codex","slot":3},{"key":"pde-rsi-v2/gpt55","label":"RSI v2 \u00b7 GPT","slot":4}],"results":[{"track":"tex","model":"Opus 5.5","entrant":"Claude Code","key":"claude-code/opus55","hidden_pass_rate":0.86,"gain_over_single":null,"validation_pass_rate":0.9,"dev_test_gap":0.040000000000000036,"rounds":5,"calls":44,"cost_usd":2.9438804,"curve":[{"submissions":0,"hidden_pass_rate":0.0},{"submissions":1,"hidden_pass_rate":0.85},{"submissions":2,"hidden_pass_rate":0.85},{"submissions":3,"hidden_pass_rate":0.85},{"submissions":4,"hidden_pass_rate":0.86},{"submissions":5,"hidden_pass_rate":0.86}]}],"planned_runs":18,"earlier":[["test3 (20)","Opus 5.5","19.7 \u00b7 $1.6","20.0 \u00b7 $18.9","19.3 \u00b7 $1.9","20.0 \u00b7 $14.9","19.7 \u00b7 $6.3 (Claude Code)"],["test3 (20)","GPT-5.5","7.7 \u00b7 $0.4","9.7 \u00b7 $17.8","3.3 \u00b7 $0.4","11.0 \u00b7 $12.2","12.0 \u00b7 $14.9 (Codex)"],["inventory_test2 (12)","Opus 5.5","9.0 \u00b7 $2.3 *","11.3 \u00b7 $14.0","10.7 *","12.0 \u00b7 $13.5","12.0 \u00b7 $6.0 (Claude Code)"],["inventory_test2 (12)","GPT-5.5","5.3 \u00b7 $0.35","9.3 \u00b7 $13.0","5.3 \u00b7 $0.4","9.0 \u00b7 $5.8","9.7 \u00b7 $9.7 (Codex)"]],"results_note":"One seed per entrant (2026-10-23). Each harness run also yields the single-run entrant for its model.","built":"2026-10-23 18:47 UTC"};
+const DATA = {"bench_cases":1001,"templates_total":42,"hidden_total":210,"val_total":42,"equations":["Poisson","heat","convection\u2013diffusion","Burgers","2-D wave","fractional ODE","time-fractional diffusion","multi-term fractional","variable-order fractional","Kuramoto\u2013Sivashinsky","Navier\u2013Stokes","Kolmogorov flow","Cahn\u2013Hilliard","Allen\u2013Cahn","Maxwell TE_z","time-harmonic EM","Darcy flow","Helmholtz","stochastic Burgers 2-D","advection\u2013diffusion\u2013reaction","4-D elliptic"],"budget":[["Improvement wall clock","2 h"],["Model calls","400"],["Prompt tokens (input + cache read + cache write)","40 M"],["Output tokens","600 k"],["Validation submissions","30"],["Solver sandbox","1 core, a GPU share, the case's time limit"]],"probes":[{"key":"v2-rsi-opus55","label":"RSI harness v2 \u00b7 Opus 5.5","short":"RSI Opus","slot":1},{"key":"claude-code-opus55","label":"Claude Code \u00b7 Opus 5.5","short":"Claude Code","slot":2},{"key":"codex-gpt55","label":"Codex \u00b7 GPT-5.5","short":"Codex","slot":3},{"key":"v2-rsi-gpt55","label":"RSI harness v2 \u00b7 GPT-5.5","short":"RSI GPT","slot":4}],"calibration":{"v2-rsi-opus55":0.9109375,"claude-code-opus55":0.8875,"codex-gpt55":0.4739583333333333,"v2-rsi-gpt55":0.25},"calibrated_cases":640,"templates":[{"label":"Multi-term fractional","variants":20,"rates":{"claude-code-opus55":0.75,"codex-gpt55":0.0,"v2-rsi-gpt55":0.0,"v2-rsi-opus55":0.8},"mean":0.3875,"hardened":false},{"label":"Burgers, sine data","variants":20,"rates":{"claude-code-opus55":0.85,"codex-gpt55":0.0,"v2-rsi-gpt55":0.05,"v2-rsi-opus55":0.7},"mean":0.39999999999999997,"hardened":false},{"label":"Conv.\u2013diff., periodic pulse","variants":20,"rates":{"claude-code-opus55":0.8,"codex-gpt55":0.0,"v2-rsi-gpt55":0.0,"v2-rsi-opus55":0.8},"mean":0.4,"hardened":false},{"label":"Adv.\u2013diff.\u2013reaction","variants":20,"rates":{"claude-code-opus55":0.75,"codex-gpt55":0.1,"v2-rsi-gpt55":0.0,"v2-rsi-opus55":0.75},"mean":0.4,"hardened":false},{"label":"Conv.\u2013diff., Gaussian pulse","variants":20,"rates":{"claude-code-opus55":0.8,"codex-gpt55":0.15,"v2-rsi-gpt55":0.0,"v2-rsi-opus55":0.8},"mean":0.4375,"hardened":false},{"label":"Wave 2-D","variants":20,"rates":{"claude-code-opus55":0.55,"codex-gpt55":0.55,"v2-rsi-gpt55":0.15,"v2-rsi-opus55":0.55},"mean":0.45,"hardened":false},{"label":"Kolmogorov flow","variants":20,"rates":{"claude-code-opus55":0.9,"codex-gpt55":0.05,"v2-rsi-gpt55":0.05,"v2-rsi-opus55":0.8},"mean":0.45,"hardened":false},{"label":"Variable order \u03b1(t)","variants":20,"rates":{"claude-code-opus55":0.95,"codex-gpt55":0.0,"v2-rsi-gpt55":0.0,"v2-rsi-opus55":0.9},"mean":0.4625,"hardened":false},{"label":"Burgers, viscous shock","variants":20,"rates":{"claude-code-opus55":0.6,"codex-gpt55":0.1,"v2-rsi-gpt55":0.2,"v2-rsi-opus55":1.0},"mean":0.475,"hardened":false},{"label":"Navier\u2013Stokes vorticity","variants":20,"rates":{"claude-code-opus55":0.95,"codex-gpt55":0.0,"v2-rsi-gpt55":0.0,"v2-rsi-opus55":0.95},"mean":0.475,"hardened":false},{"label":"Variable order \u03b1(x,t)","variants":20,"rates":{"claude-code-opus55":1.0,"codex-gpt55":0.0,"v2-rsi-gpt55":0.0,"v2-rsi-opus55":0.95},"mean":0.4875,"hardened":true},{"label":"Heat, free decay","variants":20,"rates":{"claude-code-opus55":0.75,"codex-gpt55":0.6,"v2-rsi-gpt55":0.1,"v2-rsi-opus55":0.8},"mean":0.5625,"hardened":false},{"label":"Allen\u2013Cahn","variants":20,"rates":{"claude-code-opus55":0.85,"codex-gpt55":0.55,"v2-rsi-gpt55":0.0,"v2-rsi-opus55":0.85},"mean":0.5625,"hardened":false},{"label":"Heat, periodic source","variants":20,"rates":{"claude-code-opus55":0.85,"codex-gpt55":0.6,"v2-rsi-gpt55":0.0,"v2-rsi-opus55":0.85},"mean":0.575,"hardened":false},{"label":"Helmholtz","variants":20,"rates":{"claude-code-opus55":1.0,"codex-gpt55":0.15,"v2-rsi-gpt55":0.15,"v2-rsi-opus55":1.0},"mean":0.575,"hardened":true},{"label":"Fractional ODE","variants":20,"rates":{"claude-code-opus55":1.0,"codex-gpt55":0.15,"v2-rsi-gpt55":0.2,"v2-rsi-opus55":1.0},"mean":0.5875,"hardened":true},{"label":"Burgers, Gaussian data","variants":20,"rates":{"claude-code-opus55":1.0,"codex-gpt55":0.16666666666666666,"v2-rsi-gpt55":0.2,"v2-rsi-opus55":1.0},"mean":0.5916666666666667,"hardened":true},{"label":"Burgers, manufactured","variants":20,"rates":{"claude-code-opus55":1.0,"codex-gpt55":0.4,"v2-rsi-gpt55":0.1,"v2-rsi-opus55":1.0},"mean":0.625,"hardened":false},{"label":"Heat, manufactured","variants":20,"rates":{"claude-code-opus55":0.9,"codex-gpt55":0.6,"v2-rsi-gpt55":0.1,"v2-rsi-opus55":0.95},"mean":0.6375,"hardened":false},{"label":"Time-fractional diffusion","variants":20,"rates":{"claude-code-opus55":0.95,"codex-gpt55":0.7,"v2-rsi-gpt55":0.0,"v2-rsi-opus55":0.9},"mean":0.6375,"hardened":false},{"label":"Fractional, zero initial data","variants":20,"rates":{"claude-code-opus55":1.0,"codex-gpt55":0.65,"v2-rsi-gpt55":0.0,"v2-rsi-opus55":1.0},"mean":0.6625,"hardened":true},{"label":"Conv.\u2013diff., manufactured","variants":20,"rates":{"claude-code-opus55":1.0,"codex-gpt55":0.8,"v2-rsi-gpt55":0.0,"v2-rsi-opus55":1.0},"mean":0.7,"hardened":false},{"label":"Poisson, interior layer","variants":20,"rates":{"claude-code-opus55":0.4,"codex-gpt55":0.7,"v2-rsi-gpt55":0.75,"v2-rsi-opus55":1.0},"mean":0.7125,"hardened":false},{"label":"Conv.\u2013diff., boundary layer","variants":20,"rates":{"claude-code-opus55":1.0,"codex-gpt55":0.95,"v2-rsi-gpt55":0.05,"v2-rsi-opus55":1.0},"mean":0.75,"hardened":true},{"label":"Conv.\u2013diff., layer + source","variants":20,"rates":{"claude-code-opus55":1.0,"codex-gpt55":1.0,"v2-rsi-gpt55":0.05,"v2-rsi-opus55":1.0},"mean":0.7625,"hardened":true},{"label":"Stochastic Burgers 2-D","variants":20,"rates":{"claude-code-opus55":0.9,"codex-gpt55":0.9,"v2-rsi-gpt55":0.55,"v2-rsi-opus55":0.9},"mean":0.8125,"hardened":false},{"label":"Elliptic 4-D","variants":20,"rates":{"claude-code-opus55":1.0,"codex-gpt55":1.0,"v2-rsi-gpt55":0.3,"v2-rsi-opus55":1.0},"mean":0.825,"hardened":false},{"label":"Darcy flow","variants":20,"rates":{"claude-code-opus55":1.0,"codex-gpt55":0.65,"v2-rsi-gpt55":1.0,"v2-rsi-opus55":1.0},"mean":0.9125,"hardened":false},{"label":"Poisson, random forcing","variants":20,"rates":{"claude-code-opus55":1.0,"codex-gpt55":0.65,"v2-rsi-gpt55":1.0,"v2-rsi-opus55":1.0},"mean":0.9125,"hardened":false},{"label":"Burgers, random data","variants":20,"rates":{"claude-code-opus55":0.9,"codex-gpt55":1.0,"v2-rsi-gpt55":1.0,"v2-rsi-opus55":0.9},"mean":0.95,"hardened":false},{"label":"Poisson, manufactured","variants":20,"rates":{"claude-code-opus55":1.0,"codex-gpt55":1.0,"v2-rsi-gpt55":1.0,"v2-rsi-opus55":1.0},"mean":1.0,"hardened":false},{"label":"Poisson, multiscale","variants":20,"rates":{"claude-code-opus55":1.0,"codex-gpt55":1.0,"v2-rsi-gpt55":1.0,"v2-rsi-opus55":1.0},"mean":1.0,"hardened":false}],"entrants":[{"key":"pde-rsi-v2/opus55","label":"RSI v2 \u00b7 Opus","slot":1},{"key":"claude-code/opus55","label":"Claude Code","slot":2},{"key":"codex/gpt55","label":"Codex","slot":3},{"key":"pde-rsi-v2/gpt55","label":"RSI v2 \u00b7 GPT","slot":4}],"results":[{"entrant":"Claude Code","model":"Opus 5.5","key":"claude-code/opus55","parts":["inventory","tex"],"hidden_pass_rate":0.875,"validation_pass_rate":0.90625,"dev_test_gap":0.03125,"hidden_cases":160,"rounds":6,"curve":[{"submissions":0,"hidden_pass_rate":0.0},{"submissions":1,"hidden_pass_rate":0.86875},{"submissions":2,"hidden_pass_rate":0.86875},{"submissions":3,"hidden_pass_rate":0.86875},{"submissions":4,"hidden_pass_rate":0.875},{"submissions":5,"hidden_pass_rate":0.875}],"calls":138,"cost_usd":8.1145822,"gain_over_single":null},{"entrant":"Codex","model":"GPT-5.5","key":"codex/gpt55","parts":["tex"],"hidden_pass_rate":0.43,"validation_pass_rate":0.45,"dev_test_gap":0.020000000000000018,"hidden_cases":100,"rounds":29,"curve":[{"submissions":0,"hidden_pass_rate":0.0},{"submissions":1,"hidden_pass_rate":0.19},{"submissions":2,"hidden_pass_rate":0.42},{"submissions":3,"hidden_pass_rate":0.42},{"submissions":4,"hidden_pass_rate":0.42},{"submissions":5,"hidden_pass_rate":0.42},{"submissions":6,"hidden_pass_rate":0.42},{"submissions":7,"hidden_pass_rate":0.42},{"submissions":8,"hidden_pass_rate":0.42},{"submissions":9,"hidden_pass_rate":0.43},{"submissions":10,"hidden_pass_rate":0.43},{"submissions":11,"hidden_pass_rate":0.43},{"submissions":12,"hidden_pass_rate":0.43},{"submissions":13,"hidden_pass_rate":0.43},{"submissions":14,"hidden_pass_rate":0.43},{"submissions":15,"hidden_pass_rate":0.43},{"submissions":16,"hidden_pass_rate":0.43},{"submissions":17,"hidden_pass_rate":0.43},{"submissions":18,"hidden_pass_rate":0.43},{"submissions":19,"hidden_pass_rate":0.43},{"submissions":20,"hidden_pass_rate":0.43},{"submissions":21,"hidden_pass_rate":0.43},{"submissions":22,"hidden_pass_rate":0.43},{"submissions":23,"hidden_pass_rate":0.43},{"submissions":24,"hidden_pass_rate":0.43},{"submissions":25,"hidden_pass_rate":0.43},{"submissions":26,"hidden_pass_rate":0.43},{"submissions":27,"hidden_pass_rate":0.43},{"submissions":28,"hidden_pass_rate":0.43},{"submissions":29,"hidden_pass_rate":0.43}],"calls":148,"cost_usd":15.429666,"gain_over_single":null}],"planned_entrants":6,"earlier":[["Problems 1\u201311 (20 cases)","Opus 5.5","19.7 \u00b7 $1.6","20.0 \u00b7 $18.9","19.3 \u00b7 $1.9","20.0 \u00b7 $14.9","19.7 \u00b7 $6.3 (Claude Code)"],["Problems 1\u201311 (20 cases)","GPT-5.5","7.7 \u00b7 $0.4","9.7 \u00b7 $17.8","3.3 \u00b7 $0.4","11.0 \u00b7 $12.2","12.0 \u00b7 $14.9 (Codex)"],["data-driven problems (12 cases)","Opus 5.5","9.0 \u00b7 $2.3 *","11.3 \u00b7 $14.0","10.7 *","12.0 \u00b7 $13.5","12.0 \u00b7 $6.0 (Claude Code)"],["data-driven problems (12 cases)","GPT-5.5","5.3 \u00b7 $0.35","9.3 \u00b7 $13.0","5.3 \u00b7 $0.4","9.0 \u00b7 $5.8","9.7 \u00b7 $9.7 (Codex)"]],"built":"2026-10-23 19:21 UTC"};
 const $ = (s, r = document) => r.querySelector(s);
 const el = (tag, attrs = {}, text) => { const n = document.createElement(tag); for (const [k, v] of Object.entries(attrs)) n.setAttribute(k, v); if (text != null) n.textContent = text; return n; };
 const svgEl = (tag, attrs = {}) => { const n = document.createElementNS("http://www.w3.org/2000/svg", tag); for (const [k, v] of Object.entries(attrs)) n.setAttribute(k, v); return n; };
@@ -316,20 +318,16 @@ function table(node, head, rows, numeric = []) {
   node.append(tbody);
 }
 
-// ------------------------------------------------ hero tiles, budget, tracks
+// ------------------------------------------------ hero tiles, budget, problems
 (() => {
-  const t = DATA.tracks;
-  const hidden = Object.values(t).reduce((a, x) => a + x.test, 0);
-  const tiles = [[`${DATA.bench_cases}`, "bench cases"], [`${hidden}`, "hidden-test cases"], [`${Object.values(t).reduce((a, x) => a + x.templates, 0)}`, "problem templates"], ["2 h", "per run, one model"]];
+  const tiles = [[`${DATA.bench_cases}`, "bench cases"], [`${DATA.hidden_total}`, "hidden-test cases"], [`${DATA.templates_total}`, "problem templates"], ["2 h", "per run, one model"]];
   for (const [v, l] of tiles) { const d = el("div", { class: "tile" }); d.append(el("div", { class: "v" }, v), el("div", { class: "l" }, l)); $("#tiles").append(d); }
   table($("#budget"), ["Resource", "Cap"], DATA.budget.map(b => [b[0], b[1]]), [1]);
-  for (const [key, x] of Object.entries(t)) {
-    const c = el("div", { class: "card" });
-    c.append(el("div", { class: "k" }, key.toUpperCase()), el("h4", {}, x.title));
-    c.append(el("p", {}, `${x.templates} templates · ${x.train} train · ${x.val} validation · ${x.test} hidden`));
-    const chips = el("div", { class: "chips" }); x.problems.forEach(p => chips.append(el("span", { class: "chip" }, p))); c.append(chips);
-    $("#trackcards").append(c);
-  }
+  const cards = [["SPLITS", "One distribution", `${DATA.templates_total} training · ${DATA.val_total} validation · ${DATA.hidden_total} hidden-test cases.`],
+                 ["EACH CASE", "256 noisy samples", "1 % RMS noise, black-box forcing, initial and boundary data, and the domain. The class and coefficients are hidden."],
+                 ["GENERATED POOL", `${DATA.bench_cases} cases`, "The same generator's public set, used for calibration and development."]];
+  for (const [k, h, t] of cards) { const c = el("div", { class: "card" }); c.append(el("div", { class: "k" }, k), el("h4", {}, h), el("p", {}, t)); $("#trackcards").append(c); }
+  DATA.equations.forEach(e => $("#equations").append(el("span", { class: "chip" }, e)));
   $("#built").textContent = `page built ${DATA.built}`;
 })();
 
@@ -342,55 +340,48 @@ function legend(node, items, line = false) {
 }
 function calChart() {
   const node = $("#calchart"); node.replaceChildren();
-  const tracks = ["tex", "inventory"], W = Math.max(320, node.clientWidth || 900), left = 92, right = 48, bar = 16, gap = 2, groupGap = 26;
-  const H = tracks.length * (PROBES.length * (bar + gap)) + (tracks.length - 1) * groupGap + 30;
-  const svg = svgEl("svg", { width: W, height: H, role: "img", "aria-label": "Calibration pass rate by probe and track" });
+  const W = Math.max(320, node.clientWidth || 900), left = 96, right = 48, bar = 18, gap = 6;
+  const H = PROBES.length * (bar + gap) + 28;
+  const svg = svgEl("svg", { width: W, height: H, role: "img", "aria-label": "Calibration pass rate by probe solver" });
   const x = v => left + v * (W - left - right);
   for (const t of [0, 0.25, 0.5, 0.75, 1]) {
     svg.append(svgEl("line", { x1: x(t), x2: x(t), y1: 0, y2: H - 22, stroke: "var(--grid)" }));
     const lab = svgEl("text", { x: x(t), y: H - 6, "text-anchor": "middle" }); lab.textContent = `${t * 100}%`; svg.append(lab);
   }
-  let y = 0;
-  tracks.forEach(track => {
-    const name = svgEl("text", { x: 0, y: y + (PROBES.length * (bar + gap)) / 2 + 4, style: "fill:var(--ink-2);font-size:13px" }); name.textContent = track; svg.append(name);
-    PROBES.forEach(p => {
-      const v = DATA.calibration[track]?.[p.key];
-      if (v == null) { y += bar + gap; return; }
-      const w = Math.max(2, x(v) - left), r = Math.min(4, w / 2);
-      const path = svgEl("path", { d: `M${left},${y} H${left + w - r} Q${left + w},${y} ${left + w},${y + r} V${y + bar - r} Q${left + w},${y + bar} ${left + w - r},${y + bar} H${left} Z`, fill: `var(--s${p.slot})`, tabindex: 0 });
-      const hit = svgEl("rect", { x: left, y: y - 1, width: W - left - right, height: bar + 2, fill: "transparent" });
-      const over = e => { path.style.opacity = 0.85; showTip(e, [{ value: pct(v), label: p.label, color: color(p.slot) }], `${track} · ${DATA.calibration_cases[track]} cases`); };
-      for (const n of [hit, path]) { n.addEventListener("pointermove", over); n.addEventListener("pointerleave", () => { path.style.opacity = 1; hideTip(); }); }
-      path.addEventListener("focus", e => { const b = path.getBoundingClientRect(); over({ clientX: b.right, clientY: b.top }); }); path.addEventListener("blur", hideTip);
-      svg.append(path, hit);
-      const val = svgEl("text", { class: "val", x: left + w + 6, y: y + bar - 3 }); val.textContent = pct(v); svg.append(val);
-      y += bar + gap;
-    });
-    y += groupGap - gap;
+  PROBES.forEach((p, i) => {
+    const v = DATA.calibration[p.key], y = i * (bar + gap);
+    const name = svgEl("text", { x: left - 10, y: y + bar - 4, "text-anchor": "end", style: "fill:var(--ink-2);font-size:12.5px" }); name.textContent = p.short; svg.append(name);
+    const w = Math.max(2, x(v) - left), r = Math.min(4, w / 2);
+    const path = svgEl("path", { d: `M${left},${y} H${left + w - r} Q${left + w},${y} ${left + w},${y + r} V${y + bar - r} Q${left + w},${y + bar} ${left + w - r},${y + bar} H${left} Z`, fill: `var(--s${p.slot})`, tabindex: 0 });
+    const hit = svgEl("rect", { x: left, y: y - 2, width: W - left - right, height: bar + 4, fill: "transparent" });
+    const over = e => { path.style.opacity = 0.85; showTip(e, [{ value: pct(v), label: p.label, color: color(p.slot) }], `${DATA.calibrated_cases} calibration cases`); };
+    for (const n of [hit, path]) { n.addEventListener("pointermove", over); n.addEventListener("pointerleave", () => { path.style.opacity = 1; hideTip(); }); }
+    path.addEventListener("focus", () => { const b = path.getBoundingClientRect(); over({ clientX: b.right, clientY: b.top }); }); path.addEventListener("blur", hideTip);
+    svg.append(path, hit);
+    const val = svgEl("text", { class: "val", x: left + w + 6, y: y + bar - 4 }); val.textContent = pct(v); svg.append(val);
   });
   svg.append(svgEl("line", { x1: left, x2: left, y1: 0, y2: H - 22, stroke: "var(--axis)" }));
   node.append(svg);
 }
 function calTable() {
-  table($("#caltable"), ["Track", ...PROBES.map(p => p.label)], ["tex", "inventory"].map(t => [t, ...PROBES.map(p => pct(DATA.calibration[t]?.[p.key]))]), [1, 2, 3, 4]);
+  table($("#caltable"), ["Probe solver", "Pass rate"], PROBES.map(p => [p.label, pct(DATA.calibration[p.key])]), [1]);
 }
 
 // ------------------------------------------------ calibration: per-template heatmap
-let hmTrack = "tex";
 function hmColor(v) { const steps = 6, i = Math.min(steps, Math.round(v * steps)); return `var(--seq-${i})`; }
 function hmChart() {
   const node = $("#hmchart"); node.replaceChildren();
   const narrow = (node.clientWidth || 800) < 520;
-  const rows = DATA.templates[hmTrack], cell = 30, left = narrow ? 108 : 124, top = 6, colW = Math.max(narrow ? 52 : 64, Math.min(140, ((node.clientWidth || 800) - left) / PROBES.length));
+  const rows = DATA.templates, cell = 30, left = narrow ? 158 : 214, top = 6, colW = Math.max(narrow ? 40 : 64, Math.min(140, ((node.clientWidth || 800) - left) / PROBES.length));
   const W = left + colW * PROBES.length, H = top + rows.length * (cell + 2) + 42;
-  const svg = svgEl("svg", { width: W, height: H, role: "img", "aria-label": `Pass rate per template and probe, ${hmTrack}` });
+  const svg = svgEl("svg", { width: W, height: H, role: "img", "aria-label": "Pass rate per template and probe" });
   rows.forEach((r, i) => {
     const y = top + i * (cell + 2);
-    const lab = svgEl("text", { x: left - 10, y: y + cell / 2 + 4, "text-anchor": "end", style: `fill:var(--ink-2);font-size:${narrow ? 11 : 12.5}px` }); lab.textContent = r.label + (r.hardened ? " *" : ""); svg.append(lab);
+    const lab = svgEl("text", { x: left - 10, y: y + cell / 2 + 4, "text-anchor": "end", style: `fill:var(--ink-2);font-size:${narrow ? 10.5 : 12.5}px` }); lab.textContent = r.label + (r.hardened ? " *" : ""); svg.append(lab);
     PROBES.forEach((p, j) => {
       const v = r.rates[p.key];
       const rect = svgEl("rect", { x: left + j * colW + 1, y, width: colW - 2, height: cell, rx: 4, fill: v == null ? "transparent" : hmColor(v), stroke: v == null ? "var(--grid)" : "none", tabindex: 0 });
-      const over = e => { rect.setAttribute("stroke", "var(--ink)"); showTip(e, [{ value: pct(v), label: p.label, color: color(p.slot) }], `${hmTrack} ${r.label} · ${r.variants} variants`); };
+      const over = e => { rect.setAttribute("stroke", "var(--ink)"); showTip(e, [{ value: pct(v), label: p.label, color: color(p.slot) }], `${r.label} · ${r.variants} variants`); };
       rect.addEventListener("pointermove", over); rect.addEventListener("pointerleave", () => { rect.setAttribute("stroke", v == null ? "var(--grid)" : "none"); hideTip(); });
       rect.addEventListener("focus", e => { const b = rect.getBoundingClientRect(); over({ clientX: b.right, clientY: b.top }); }); rect.addEventListener("blur", () => { rect.setAttribute("stroke", "none"); hideTip(); });
       svg.append(rect);
@@ -408,30 +399,24 @@ function hmChart() {
   table($("#hmtable"), ["Template", "Variants", ...PROBES.map(p => p.label), "Mean"],
     rows.map(r => [r.label + (r.hardened ? " (hardened in bench)" : ""), String(r.variants), ...PROBES.map(p => pct(r.rates[p.key])), pct(r.mean)]), [1, 2, 3, 4, 5, 6]);
 }
-$("#hmtrack").addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; hmTrack = b.dataset.track; $("#hmtrack").querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", x === b)); hmChart(); });
 
 // ------------------------------------------------ results
 const ENTRANTS = DATA.entrants;  // [{key, label, slot}]
-let curveTrack = null;
 function results() {
   const rows = DATA.results || [];
-  const done = rows.length, planned = DATA.planned_runs;
-  $("#resultsub").textContent = done ? `${DATA.results_note} ${done < planned ? `${done} of ${planned} entrant results are in; the rest are still running.` : ""}`
-    : "The 12 baseline runs (three tracks; harness v2 with Opus 5.5 and GPT-5.5, Claude Code, Codex; one seed) are running. Results appear here when they are scored.";
-  const order = { tex: 0, ext: 1, inventory: 2 };
-  rows.sort((a, b) => order[a.track] - order[b.track] || a.model.localeCompare(b.model) || a.entrant.localeCompare(b.entrant));
+  const lead = "One seed per entrant (2026-10-23). Each harness run also yields the single-run entrant for its model, and each result combines the entrant's sub-runs over the templates scored so far.";
+  $("#resultsub").textContent = rows.length
+    ? `${lead} ${rows.some(r => r.hidden_cases < DATA.hidden_total) ? "Entrants still running show the hidden cases scored so far." : ""}`
+    : "The baseline runs (harness v2 with Opus 5.5 and GPT-5.5, Claude Code, Codex; one seed) are running. Results appear here when they are scored.";
+  rows.sort((a, b) => (b.hidden_pass_rate - a.hidden_pass_rate));
   const sign = v => v == null ? "—" : `${v > 0 ? "+" : ""}${Math.round(v * 100)} pts`;
-  table($("#resulttable"), ["Track", "Model", "Entrant", "Held-out pass rate", "Gain over single run", "Validation", "Dev–test gap", "Rounds", "Model calls", "Cost"],
-    rows.map(r => [r.track, r.model, r.entrant, pct(r.hidden_pass_rate), sign(r.gain_over_single), pct(r.validation_pass_rate), sign(r.dev_test_gap), String(r.rounds), r.calls == null ? "—" : String(r.calls), r.cost_usd == null ? "—" : `$${r.cost_usd.toFixed(1)}`]),
-    [3, 4, 5, 6, 7, 8, 9]);
-  const withCurves = [...new Set(rows.filter(r => r.curve && r.curve.length).map(r => r.track))];
-  if (!withCurves.length) return;
+  table($("#resulttable"), ["Entrant", "Model", "Held-out pass rate", "Gain over single run", "Validation", "Dev–test gap", "Hidden cases scored", "Rounds", "Model calls", "Cost"],
+    rows.map(r => [r.entrant, r.model, pct(r.hidden_pass_rate), sign(r.gain_over_single), pct(r.validation_pass_rate), sign(r.dev_test_gap), `${r.hidden_cases} of ${DATA.hidden_total}`, String(r.rounds), r.calls == null ? "—" : String(r.calls), r.cost_usd == null ? "—" : `$${r.cost_usd.toFixed(1)}`]),
+    [2, 3, 4, 5, 6, 7, 8, 9]);
+  const curved = rows.filter(r => r.curve && r.curve.length);
+  if (!curved.length) return;
   $("#curvepanel").hidden = false;
-  curveTrack = curveTrack || withCurves[0];
-  const seg = $("#curvetrack"); seg.replaceChildren();
-  for (const t of withCurves) { const b = el("button", { "aria-pressed": t === curveTrack, "data-track": t }, t); seg.append(b); }
-  seg.onclick = e => { const b = e.target.closest("button"); if (!b) return; curveTrack = b.dataset.track; results(); };
-  curves(rows.filter(r => r.track === curveTrack));
+  curves(curved);
 }
 function curves(rows) {
   const node = $("#curvechart"); node.replaceChildren();
@@ -440,11 +425,11 @@ function curves(rows) {
   const W = Math.max(320, node.clientWidth || 900), H = 300, left = 44, right = 120, top = 12, bottom = 30;
   const maxR = Math.max(1, ...rows.map(r => r.curve[r.curve.length - 1].submissions));
   const x = v => left + (v / maxR) * (W - left - right), y = v => top + (1 - v) * (H - top - bottom);
-  const svg = svgEl("svg", { width: W, height: H, role: "img", "aria-label": `Held-out pass rate by round, ${curveTrack}` });
+  const svg = svgEl("svg", { width: W, height: H, role: "img", "aria-label": "Held-out pass rate by round" });
   for (const t of [0, 0.25, 0.5, 0.75, 1]) { svg.append(svgEl("line", { x1: left, x2: W - right, y1: y(t), y2: y(t), stroke: "var(--grid)" })); const l = svgEl("text", { x: left - 8, y: y(t) + 4, "text-anchor": "end" }); l.textContent = `${t * 100}%`; svg.append(l); }
   const ticks = maxR <= 10 ? maxR : 6;
   for (let i = 0; i <= ticks; i++) { const r = Math.round(i * maxR / ticks); const l = svgEl("text", { x: x(r), y: H - 8, "text-anchor": "middle" }); l.textContent = r; svg.append(l); }
-  const xl = svgEl("text", { x: W - right, y: H - 8, "text-anchor": "start", dx: 8 }); xl.textContent = "rounds"; svg.append(xl);
+  const xl = svgEl("text", { x: W - right + 34, y: H - 8, "text-anchor": "start" }); xl.textContent = "rounds"; svg.append(xl);
   const ends = [];
   for (const r of rows) {
     const en = ENTRANTS.find(e => e.key === r.key); if (!en) continue;
@@ -453,10 +438,10 @@ function curves(rows) {
     if (pts.length > 1) svg.append(svgEl("path", { d: "M" + pts.map(([a, b]) => `${x(a)},${y(b)}`).join(" L"), fill: "none", stroke: `var(--s${en.slot})`, "stroke-width": 2, "stroke-linejoin": "round", "stroke-linecap": "round" }));
     const last = r.curve[r.curve.length - 1];
     svg.append(svgEl("circle", { cx: x(last.submissions), cy: y(last.hidden_pass_rate), r: 4.5, fill: `var(--s${en.slot})`, stroke: "var(--surface)", "stroke-width": 2 }));
-    ends.push({ y: y(last.hidden_pass_rate), x: x(last.submissions), label: `${en.label} ${pct(last.hidden_pass_rate)}` });
+    ends.push({ y: y(last.hidden_pass_rate), x: x(last.submissions), label: `${en.label} ${pct(last.hidden_pass_rate)}` });  // label beside its end dot
   }
   ends.sort((a, b) => a.y - b.y); let prev = -99;
-  for (const e of ends) { const yy = Math.max(e.y + 4, prev + 15); prev = yy; const t = svgEl("text", { class: "val", x: W - right + 8, y: yy }); t.textContent = e.label; svg.append(t); }
+  for (const e of ends) { const yy = Math.max(e.y - 8, prev + 15); prev = yy; const t = svgEl("text", { class: "val", x: Math.min(e.x + 10, W - right + 8), y: yy }); t.textContent = e.label; svg.append(t); }
   const cross = svgEl("line", { y1: top, y2: H - bottom, stroke: "var(--axis)", opacity: 0 }); svg.append(cross);
   const hit = svgEl("rect", { x: left, y: top, width: W - left - right, height: H - top - bottom, fill: "transparent" });
   hit.addEventListener("pointermove", e => {
