@@ -1,0 +1,5 @@
+# Optional dataset packaging tools. Install only through scripts/setup_hf.sh.
+datasets>=3
+pyarrow>=15
+huggingface_hub>=0.26
+PyYAML>=6

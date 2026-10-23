@@ -1,0 +1,25 @@
+# Apptainer image of RSI-PDE Bench v1 (harness, evaluator, sandbox tools). Entrant agents (Claude Code, Codex)
+# are not included: mount their binaries. The hidden test (evaluator_private/) is never part of the image.
+#   apptainer build rsi-pde-bench.sif containers/rsi-pde-bench.def      (from the repository root)
+#   apptainer exec --nv --bind $PWD:/bench rsi-pde-bench.sif python scripts/bench.py ...
+Bootstrap: docker
+From: mambaorg/micromamba:2.0.5
+
+%files
+    containers/environment-lock.yml /opt/env.yml
+    containers/gpu-solver-requirements.txt /opt/gpu-solver-requirements.txt
+
+%post
+    apt-get update && apt-get install -y --no-install-recommends bubblewrap ca-certificates
+    rm -rf /var/lib/apt/lists/*
+    micromamba create -y -p /opt/pde-rsi -f /opt/env.yml
+    micromamba create -y -p /opt/gpu-env -c conda-forge python=3.10.19 pip && micromamba clean -a -y
+    /opt/gpu-env/bin/pip install --no-cache-dir -r /opt/gpu-solver-requirements.txt
+
+%environment
+    export PATH=/opt/pde-rsi/bin:$PATH
+    export PDE_RSI_ENV_PREFIX=/opt/pde-rsi PDE_RSI_PROJECT_ROOT=/bench PDE_RSI_GPU_ENV=/opt/gpu-env
+    export PYTHONPATH=/bench/src
+
+%runscript
+    exec /opt/pde-rsi/bin/python "$@"

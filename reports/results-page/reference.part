@@ -1,0 +1,117 @@
+<section id="tex">
+  <h2>pde_benchmarks.tex: equations and cases</h2>
+  <p>There are 11 problems and 20 cases. Each case is built by manufactured or closed-form solutions, and the agent must first identify which of the 10 library classes generated the data. The Caputo derivative of order α ∈ (0, 1) is <span class="eq">D<sub>t</sub><sup>α</sup>u = 1/Γ(1−α) ∫₀ᵗ (t−τ)<sup>−α</sup> u<sub>τ</sub> dτ</span>. A variable order α(x,t) is evaluated at the point and held fixed inside the integral.</p>
+  <div class="scroll"><table class="ref"><thead><tr><th scope="col">Case</th><th scope="col">Equation (library class)</th><th scope="col">Domain, BC, IC</th><th scope="col">Exact solution</th></tr></thead><tbody>
+    <tr><th scope="row">1a Poisson, manufactured</th><td><span class="eq">−D u<sub>xx</sub> = f(x)</span> (poisson)</td><td>(0, L), u = 0 at both ends</td><td>u = A s(x)</td></tr>
+    <tr><th scope="row">1b Poisson, multiscale</th><td>same</td><td>(0, 1), u = 0 at both ends</td><td>u = sin 2πx + 0.1 sin 50πx</td></tr>
+    <tr><th scope="row">1c Poisson, interior layer</th><td>same</td><td>(0, 1), Dirichlet data from u</td><td>u = arctan(α(x − x₀))</td></tr>
+    <tr><th scope="row">2a Heat, manufactured</th><td><span class="eq">u<sub>t</sub> − D u<sub>xx</sub> = f</span> (heat)</td><td>(0, L)×(0, T], u = 0 at ends, u(x,0) = A s(x)</td><td>u = A s(x)(1 + t<sup>β</sup>)</td></tr>
+    <tr><th scope="row">2b Heat, free decay</th><td>same, f = 0</td><td>(0, L), u(x,0) = sin(πx/L)</td><td>u = e<sup>−Dπ²t/L²</sup> sin(πx/L)</td></tr>
+    <tr><th scope="row">2c Heat, periodic source</th><td>same, f = sin(πx/L) cos γt</td><td>(0, L), u(x,0) = 0</td><td>u = a(t) sin(πx/L), a from a′ + λa = cos γt</td></tr>
+    <tr><th scope="row">3a Conv.–diff., manufactured</th><td><span class="eq">u<sub>t</sub> + v u<sub>x</sub> − D u<sub>xx</sub> = f</span> (convection_diffusion)</td><td>(0, L)×(0, T], u = 0 at ends</td><td>u = A s(x)(1 + t<sup>β</sup>)</td></tr>
+    <tr><th scope="row">3b Conv.–diff., boundary layer</th><td>steady <span class="eq">v u′ − D u″ = 0</span></td><td>(0, L), u(0) = 0, u(L) = 1</td><td>u = (e<sup>Pe x/L</sup> − 1)/(e<sup>Pe</sup> − 1), Pe = vL/D; only v/D identifiable</td></tr>
+    <tr><th scope="row">3c Conv.–diff., layer + source</th><td>steady <span class="eq">v u′ − D u″ = 1</span></td><td>(0, L), u = 0 at ends</td><td>u = [x − L(e<sup>Pe x/L</sup> − 1)/(e<sup>Pe</sup> − 1)]/v</td></tr>
+    <tr><th scope="row">3d Conv.–diff., advected Gaussian</th><td>f = 0</td><td>(0, L), Dirichlet data from u</td><td>u = (σ₀/σ) exp(−(x − x₀ − vt)²/2σ²), σ² = σ₀² + 2Dt</td></tr>
+    <tr><th scope="row">4a Burgers, manufactured</th><td><span class="eq">u<sub>t</sub> + u u<sub>x</sub> − D u<sub>xx</sub> = f</span> (burgers)</td><td>(0, L)×(0, T], u = 0 at ends</td><td>u = A s(x)(1 + t<sup>β</sup>)</td></tr>
+    <tr><th scope="row">4b Burgers, sine data</th><td>f = 0</td><td>(−1, 1)×(0, 1], u(±1) = 0, u(x,0) = −sin πx</td><td>Cole–Hopf integral (steep layer at x = 0)</td></tr>
+    <tr><th scope="row">4c Burgers, viscous shock</th><td>f = 0</td><td>(a, L), Dirichlet data from u</td><td>u = (u<sub>ℓ</sub>+u<sub>r</sub>)/2 − (u<sub>ℓ</sub>−u<sub>r</sub>)/2 · tanh((u<sub>ℓ</sub>−u<sub>r</sub>)(x − ct)/4D)</td></tr>
+    <tr><th scope="row">5 2-D wave</th><td><span class="eq">u<sub>tt</sub> − D(u<sub>xx</sub> + u<sub>yy</sub>) = f</span> (wave2d)</td><td>(0, L)², u = 0 on edges, u<sub>t</sub>(·,0) = 0</td><td>u = A s(x)s(y)[cos ωt + t<sup>β</sup>], ω = π√(2D)/L</td></tr>
+    <tr><th scope="row">6 Fractional ODE</th><td><span class="eq">D<sub>t</sub><sup>α</sup>u = f(t)</span> (fode)</td><td>t ∈ (0, 1], u(0) = 0</td><td>u = t<sup>p</sup></td></tr>
+    <tr><th scope="row">7 Time-fractional diffusion</th><td><span class="eq">D<sub>t</sub><sup>α</sup>u − D u<sub>xx</sub> = f</span> (caputo)</td><td>(0, L)×(0, T], u = 0 at ends</td><td>u = A s(x)(1 + t<sup>β</sup>)</td></tr>
+    <tr><th scope="row">8 Multi-term time-fractional</th><td><span class="eq">w₁D<sub>t</sub><sup>α₁</sup>u + w₂D<sub>t</sub><sup>α₂</sup>u − D u<sub>xx</sub> = f</span> (multi_term)</td><td>(0, L)×(0, T], u = 0 at ends</td><td>u = A s(x)(1 + t<sup>β</sup>)</td></tr>
+    <tr><th scope="row">9 Time-fractional, zero IC</th><td><span class="eq">D<sub>t</sub><sup>α</sup>u = u<sub>xx</sub> + f</span> (caputo, D = 1)</td><td>(0, π)×(0, 1], u = 0 at ends, u(x,0) = 0</td><td>u = t<sup>p</sup> sin x</td></tr>
+    <tr><th scope="row">10 Variable order α(t)</th><td><span class="eq">D<sub>t</sub><sup>α(t)</sup>u = u<sub>xx</sub> + f</span>, α = c sin²t (variable_order_t)</td><td>same as 9</td><td>u = t<sup>p</sup> sin x</td></tr>
+    <tr><th scope="row">11 Variable order α(x,t)</th><td><span class="eq">D<sub>t</sub><sup>α(x,t)</sup>u = u<sub>xx</sub> + f</span>, α = c t² sin x (variable_order_xt)</td><td>same as 9</td><td>u = t<sup>p</sup> sin x</td></tr>
+  </tbody></table></div>
+  <p class="note">Manufactured cases use the spatial profile s(x) of their split. Training uses sin(πx/L); validation uses 4(x/L)(1 − x/L); the sealed splits use sin(πx/L) + ¼ sin(3πx/L). Their numbers are drawn per case: L ∈ [1, 3], T ∈ [0.5, 1], A ∈ [0.5, 1.5], D log-uniform in [0.05, 1], β ∈ [1, 2]. Some cases draw differently:</p>
+  <ul class="note">
+    <li>3a: v = ±U(0.3, 1.5).</li>
+    <li>4a: A ∈ [0.3, 1], D ∈ [0.05, 0.5].</li>
+    <li>5: L ∈ [1, 2], D ∈ [0.1, 1], β ∈ [2, 3].</li>
+    <li>7: α ∈ [0.3, 0.9].</li>
+    <li>8: α₁ ∈ [0.2, 0.5], α₂ ∈ [0.6, 0.9], w ∈ [0.3, 1.5].</li>
+  </ul>
+  <h3>Numbers of the literature cases in each split</h3>
+  {{LIT_NUMBERS}}
+  <p class="note">Split sizes: training 16, validation 16, sealed test 17, sealed test2 20, fresh test3 20. The two public splits contain every class. Case IDs are hash-ordered and reveal neither the class nor the tex case.</p>
+</section>
+
+<section id="inventory">
+  <h2>PDE Data Inventory: equations and cases</h2>
+  <p>There are 12 families from <i>PDE Data Inventory</i> (X. Kong, 19 October 2026), with inputs from the DiffusionPDE test set where the inventory leaves gaps. Each split has one case per family. The library adds the classes below to the 10 tex classes. All references are computed at high resolution and checked against a coarser solve.</p>
+  <div class="scroll"><table class="ref"><thead><tr><th scope="col">Family</th><th scope="col">Equation (library class)</th><th scope="col">Domain and inputs</th><th scope="col">Identified coefficients</th><th scope="col">Limit, tolerance</th></tr></thead><tbody>
+    <tr><th scope="row">Burgers, Gaussian IC</th><td><span class="eq">u<sub>t</sub> + u u<sub>x</sub> − D u<sub>xx</sub> = 0</span> (burgers)</td><td>[−8, 8) periodic, u₀ = exp(−(x−3)²/2), T = 10</td><td>D</td><td>90 s, 2e-3</td></tr>
+    <tr><th scope="row">Burgers, random IC</th><td>same (burgers)</td><td>[0, 1) periodic, DiffusionPDE u₀, T = 1</td><td>D = 0.01</td><td>90 s, 2e-3</td></tr>
+    <tr><th scope="row">Linear conv.–diff.</th><td><span class="eq">u<sub>t</sub> + v u<sub>x</sub> − D u<sub>xx</sub> = 0</span> (convection_diffusion)</td><td>[0, 20], Gaussian pulse, T = 5, Dirichlet data from whole-line solution</td><td>v = 1, D = 1</td><td>90 s, 2e-3</td></tr>
+    <tr><th scope="row">Darcy</th><td><span class="eq">−∇·(a ∇u) = f</span>, f = 1 (darcy_2d)</td><td>[0, 1]², DiffusionPDE permeability 3/12, u = 0 on edges</td><td>—</td><td>300 s, 2e-3</td></tr>
+    <tr><th scope="row">Poisson</th><td><span class="eq">u<sub>xx</sub> + u<sub>yy</sub> = f</span> (poisson_2d)</td><td>[0, 1]², DiffusionPDE forcing (bicubic), u = 0 on edges</td><td>—</td><td>300 s, 2e-3</td></tr>
+    <tr><th scope="row">Helmholtz</th><td><span class="eq">u<sub>xx</sub> + u<sub>yy</sub> + k²u = f</span> (helmholtz_2d)</td><td>[0, 1]², DiffusionPDE forcing</td><td>k = 1</td><td>300 s, 2e-3</td></tr>
+    <tr><th scope="row">Navier–Stokes</th><td><span class="eq">ω<sub>t</sub> + v·∇ω = ν Δω − μω + q</span> (vorticity_ns)</td><td>unit torus, DiffusionPDE ω₀, q = 0.1[sin 2π(x+y) + cos 2π(x+y)], T = 1</td><td>ν = 1e-3, μ = 0</td><td>300 s, 2e-3</td></tr>
+    <tr><th scope="row">Kolmogorov</th><td>same (vorticity_ns)</td><td>2π torus, ω₀ ~ N(0, 7<sup>3/2</sup>(−Δ+49)<sup>−5/2</sup>), q = −4 cos 4y, T = 1</td><td>ν = 1e-3, μ = 0.1</td><td>300 s, 2e-3</td></tr>
+    <tr><th scope="row">Allen–Cahn</th><td><span class="eq">u<sub>t</sub> = ∇·(κ∇u) + λ(u − u³) + f</span> (allen_cahn_2d)</td><td>2π torus, ξ ~ U[−1, 1]⁵⁷, κ(x, y, ξ), T = 1</td><td>λ = 0.8 + 0.2ξ₅₇</td><td>300 s, 2e-3</td></tr>
+    <tr><th scope="row">2-D Burgers</th><td><span class="eq">u<sub>t</sub> + c<sub>x</sub>u u<sub>x</sub> + c<sub>y</sub>u u<sub>y</sub> = ∇·(κ∇u) + f</span> (burgers_2d)</td><td>2π torus, ξ ~ U[−1, 1]²⁰, T = 0.25</td><td>c<sub>x</sub>, c<sub>y</sub></td><td>300 s, 2e-3</td></tr>
+    <tr><th scope="row">ADR</th><td><span class="eq">u<sub>t</sub> + c<sub>x</sub>u u<sub>x</sub> + c<sub>y</sub>u u<sub>y</sub> = ∇·(κ∇u) + λ(u − u³) + f</span> (adr_2d)</td><td>2π torus, m = 4 diffusivity modes, f = γf₀, T = 2</td><td>c<sub>x</sub>, c<sub>y</sub>, λ</td><td>300 s, 2e-3</td></tr>
+    <tr><th scope="row">4-D elliptic</th><td><span class="eq">−∇·(a ∇u) = f</span> (elliptic_4d)</td><td>B³ × (−1, 1), â from a Matérn-3/2 field, u = 0 on the boundary, 103,845 output points</td><td>—</td><td>300 s, 5e-2</td></tr>
+  </tbody></table></div>
+  <h3>Per-split inputs</h3>
+  {{INV_NUMBERS}}
+  <p class="note">References are computed as follows:</p>
+  <ul class="note">
+    <li>1-D Burgers: pseudospectral ETDRK4.</li>
+    <li>Darcy: finite volumes on an 8× refined grid.</li>
+    <li>Poisson and Helmholtz: sine series.</li>
+    <li>Navier–Stokes and Kolmogorov: integrating-factor RK4.</li>
+    <li>Allen–Cahn, 2-D Burgers and ADR: pseudospectral RK4.</li>
+    <li>4-D elliptic: 63⁴ finite volumes.</li>
+    <li>Linear convection–diffusion: closed form.</li>
+  </ul>
+  <p class="note">The tolerance is at least 5× the reference's own error. That error is at most 3.5e-4 for every family except the 4-D one, whose reference error of about 1 % sets its 5 % tolerance.</p>
+</section>
+
+<section id="manufactured">
+  <h2>Manufactured suites: code and student protocols</h2>
+  <p>In the code protocol the equation is given and the agent writes one solver per family, starting either from classical solvers or from scratch. In the student protocol the agent must identify the class from data, as in the suites above.</p>
+  <div class="scroll"><table class="ref"><thead><tr><th scope="col">Set</th><th scope="col">Families and equations</th><th scope="col">Exact solution</th><th scope="col">Cases</th></tr></thead><tbody>
+    <tr><th scope="row">1-D (Hugging Face JeremyLu1017/PDE-RSI)</th><td>poisson <span class="eq">−D u<sub>xx</sub> = f</span>; heat; convection_diffusion; burgers; caputo <span class="eq">D<sub>t</sub><sup>α</sup>u − D u<sub>xx</sub> = f</span>; multi_term <span class="eq">Σ w<sub>j</sub>D<sub>t</sub><sup>α<sub>j</sub></sup>u − D u<sub>xx</sub> = f</span>; on [0, L], u = 0 at both ends</td><td>A s(x)(1 + t<sup>β</sup>), profile by split</td><td>24 training, 24 validation, 24 reserved</td></tr>
+    <tr><th scope="row">2-D wave</th><td><span class="eq">u<sub>tt</sub> − D(u<sub>xx</sub> + u<sub>yy</sub>) = f</span> on [0, L]², u = 0 on edges, u<sub>t</sub>(·,0) = 0</td><td>A s(x)s(y)(cos ωt + t<sup>β</sup>)</td><td>4, 4, 4</td></tr>
+    <tr><th scope="row">Group FPDE</th><td>fode; fpde_caputo <span class="eq">D<sub>t</sub><sup>α</sup>u = u<sub>xx</sub> + f</span>; variable order α(t) = c sin²t; α(x,t) = c t² sin x; on [0, π]×[0, 1]</td><td>t<sup>p</sup> sin x (FODE: t<sup>p</sup>)</td><td>8, 8, 4</td></tr>
+    <tr><th scope="row">Student protocol</th><td>heat, convection_diffusion, burgers, caputo, multi_term, fpde_caputo, variable order α(t) and α(x,t), identified from 256 noisy samples</td><td>as in the sets above</td><td>8 training, 8 validation</td></tr>
+  </tbody></table></div>
+</section>
+
+<section id="settings">
+  <h2>Settings</h2>
+  <h3>Scoring (all suites)</h3>
+  <p>The returned solution is linearly interpolated onto a uniform evaluation grid and compared with the exact or reference solution, using trapezoidal space-time and final-time relative L2. A case passes when all of these hold:</p>
+  <ul>
+    <li>both relative L2 errors are within the tolerance;</li>
+    <li>initial and boundary values hold to 1e-10;</li>
+    <li>the solve fits the time limit (wall and CPU, including start-up) and the memory limit.</li>
+  </ul>
+  <p>The reported class and coefficients are scored separately and never gate a case.</p>
+  <div class="scroll"><table class="ref"><thead><tr><th scope="col">Suite</th><th scope="col">Data given</th><th scope="col">Tolerance</th><th scope="col">Limits</th><th scope="col">Evaluation grid</th></tr></thead><tbody>
+    <tr><th scope="row">pde_benchmarks.tex</th><td>256 samples, 1 % RMS noise (100 % in the noise variant), black-box f, IC, BC, library of 10 classes</td><td>2e-3</td><td>90 s, 16 GB, 1 CPU thread + shared H100</td><td>1-D 512 × 500; steady 512; ODE 500; 2-D 128² × 100</td></tr>
+    <tr><th scope="row">PDE Data Inventory</th><td>256 samples, 1 % noise, black-box f, IC, BC, coefficient fields, gridded DiffusionPDE inputs, library of 18 classes</td><td>2e-3 (4-D: 5e-2)</td><td>90 s (1-D), 300 s (2-D, 4-D), 16 GB</td><td>1-D 512 × 500; 2-D steady 256²; 2-D time 128² × 11; 4-D 103,845 points</td></tr>
+    <tr><th scope="row">Manufactured code protocol</th><td>the equation, f and IC as callables</td><td>2e-3</td><td>15 s, 1 GB</td><td>1-D 512 × 500; wave 128² × 100</td></tr>
+    <tr><th scope="row">Student protocol</th><td>256 samples, 1 % noise, library</td><td>2e-3</td><td>90 s, 16 GB</td><td>as code protocol</td></tr>
+  </tbody></table></div>
+  <h3>Harness and agent settings</h3>
+  <div class="scroll"><table class="ref"><thead><tr><th scope="col">Item</th><th scope="col">Setting</th></tr></thead><tbody>
+    <tr><th scope="row">Models (Amazon Bedrock)</th><td>Claude Opus 5.5, GPT-5.5, GPT-6.1, Claude Sonnet 4.5, GPT-OSS-120B. Output cap 64k tokens for Opus (32k for the others in the 6-round runs). The single runs of Opus use its 128k maximum, because at 64k its answer was cut off.</td></tr>
+    <tr><th scope="row">RSI round</th><td>Each round the model proposes the full program, or patches under v2. The candidate first passes a training self-test, with up to 3 attempts per round, and is then sent to the validation gate. Only the last 6 rounds of history are replayed.</td></tr>
+    <tr><th scope="row">Validation gate</th><td>A candidate is accepted when all of these hold:
+      <ul>
+        <li>no execution, IC/BC or resource failure;</li>
+        <li>macro relative L2 drops by more than 0.5 %;</li>
+        <li>no class mean rises more than 5 % and no class pass rate drops;</li>
+        <li>no case's space-time or final-time error rises more than 25 %.</li>
+      </ul>
+      Under v2, a candidate that changes only class parts is gated per part, on the validation cases routed to that part.</td></tr>
+    <tr><th scope="row">Matched studies (18 and 20 Oct, v2 on 20 Oct)</th><td>3 independent runs per configuration, a 2 h wall-clock budget, a $25 model-spending cap and 30 gated validation submissions. Each arm runs on its own dedicated CPU core of an H100 node. The single run is one request.</td></tr>
+    <tr><th scope="row">Earlier runs (16 and 17 Oct)</th><td>RSI either ran 6 rounds with 2 continuation rounds, or ran for 2 h on concurrent pinned cores with at most 200 rounds.</td></tr>
+    <tr><th scope="row">Native agents</th><td>Claude Code with Opus 5.5 and Codex with GPT-5.5 (reasoning effort medium) run in a sandbox with no web tools. They get the same task text and an evaluation service: unlimited training evaluations, at most 30 validation submissions through the same gate, and the last accepted solver as the result. A run stops after two idle sessions.</td></tr>
+    <tr><th scope="row">Hidden cases</th><td>The sealed and fresh splits are never shown to any agent and are scored once, after freezing. Use the fresh splits, test3 and inventory_test2, for any further development decision. The earlier sealed splits have been inspected.</td></tr>
+  </tbody></table></div>
+  <p class="note">Sources: the runs/ folders of /depot/lin491/data/Binghang_project/PDE-RSI. These include v2-fresh-comparison-20261020, matched-study-results-20261018, matched-inv-study-results-20261020 and the code-agent-results-* folders, plus docs/harness-v2.md, docs/pdebench.md and docs/inventory.md.</p>
+</section>
+</main>

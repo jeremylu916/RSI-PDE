@@ -1,0 +1,62 @@
+[
+  {
+    "track": "tex",
+    "model": "opus55",
+    "entrant": "claude-code",
+    "run": "bench-v1-tex-claude-code-opus55-20261023",
+    "curve": [
+      {
+        "submissions": 0,
+        "program": "87b70e1802930090",
+        "hidden_pass_rate": 0.0
+      },
+      {
+        "submissions": 1,
+        "program": "5e61b72429b80d1e",
+        "hidden_pass_rate": 0.85
+      },
+      {
+        "submissions": 2,
+        "program": "5e61b72429b80d1e",
+        "hidden_pass_rate": 0.85
+      },
+      {
+        "submissions": 3,
+        "program": "5e61b72429b80d1e",
+        "hidden_pass_rate": 0.85
+      },
+      {
+        "submissions": 4,
+        "program": "b0946d41d5498d19",
+        "hidden_pass_rate": 0.86
+      },
+      {
+        "submissions": 5,
+        "program": "b0946d41d5498d19",
+        "hidden_pass_rate": 0.86
+      }
+    ],
+    "hidden_pass_rate": 0.86,
+    "validation_pass_rate": 0.9,
+    "dev_test_gap": 0.040000000000000036,
+    "metered_usage": {
+      "calls": 44,
+      "refused": 0,
+      "input": 88,
+      "cache_read": 2990071,
+      "cache_write": 108476,
+      "output": 60256,
+      "prompt_tokens": 3098635,
+      "caps": {
+        "calls": 400,
+        "prompt_tokens": 40000000,
+        "output_tokens": 600000
+      },
+      "exhausted": null
+    },
+    "wall_seconds": 1904.44939661026,
+    "cost_usd": 2.9438804,
+    "rounds": 5,
+    "gain_over_single": null
+  }
+]

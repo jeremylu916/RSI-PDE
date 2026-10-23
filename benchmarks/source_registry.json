@@ -1,0 +1,17 @@
+{
+  "status": "Literature identifiers transcribed from the supplied plan; no sources downloaded or independently verified.",
+  "sources": [
+    {"number": 1, "name": "CFDLLMBench", "role": "Python solver tasks; separate OpenFOAM transfer track", "import_status": "pending identifier, license, and evaluator review"},
+    {"number": 2, "name": "PDEAgent-Bench", "role": "Task specification and staged evaluation comparator", "import_status": "pending identifier, license, and evaluator review"},
+    {"number": 3, "name": "PINNACLE sampling method", "arxiv_from_plan": "2404.07662", "import_status": "pending verification"},
+    {"number": 4, "name": "FEA-Bench repository feature implementation", "arxiv_from_plan": "2503.06680", "role": "Distinguish from finite-element physics tasks", "import_status": "not selected"},
+    {"number": 5, "name": "FEABench finite-element physics", "arxiv_from_plan": "2504.06260", "role": "Optional COMSOL extension", "import_status": "pending verification; outside pilot"},
+    {"number": 6, "name": "PINNacle comprehensive benchmark", "arxiv_from_plan": "2306.08827", "import_status": "pending verification"},
+    {"number": 7, "name": "PDE/PINN agent baseline", "import_status": "bibliographic details needed"},
+    {"number": 8, "name": "PDE/PINN agent baseline", "import_status": "bibliographic details needed"},
+    {"number": 9, "name": "AIDE squared", "role": "Harness RSI methodological comparator", "import_status": "bibliographic details needed"},
+    {"number": 10, "name": "PDE/PINN agent baseline", "import_status": "bibliographic details needed"},
+    {"name": "Group FPDE examples", "role": "Time-fractional, diffusion-wave, multi-term, and space-fractional cases", "import_status": "pending user-selected local examples; existing projects untouched"},
+    {"name": "PDE-RSI-manufactured-v1", "role": "Current 72-case pilot", "import_status": "implemented; self-generated, analytic references"}
+  ]
+}

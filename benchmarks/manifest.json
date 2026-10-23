@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "benchmark_version": "manufactured-v1",
+  "cases": 72,
+  "source_status": "self-generated pilot; literature sources pending verification and permission review",
+  "files": {
+    "evolution": {
+      "path": "benchmarks/evolution.jsonl",
+      "cases": 24,
+      "sha256": "3661b663e7e3878ab914821e82a09f352e89564947f01461f808c7f448caf175"
+    },
+    "development": {
+      "path": "benchmarks/development.jsonl",
+      "cases": 24,
+      "sha256": "794a4524acca53dd7602cc42388242bbe46085211d5adef7d364c16586b7a7d9"
+    },
+    "sealed": {
+      "path": "evaluator_private/sealed.jsonl",
+      "cases": 24,
+      "sha256": "d4eadda72bf03a27f8bd4c367962c1defb170ad475d41835be7b9f8cf4b2291c"
+    }
+  }
+}

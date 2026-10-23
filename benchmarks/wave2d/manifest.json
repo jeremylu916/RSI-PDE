@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "benchmark_version": "manufactured-wave2d-v1",
+  "cases": 12,
+  "families": [
+    "wave2d"
+  ],
+  "files": {
+    "evolution": {
+      "path": "benchmarks/wave2d/evolution.jsonl",
+      "cases": 4,
+      "sha256": "3cb0aa4617f2d076f75682248ec4fb4cd4312848fbad870bad4b39706a3c0eef"
+    },
+    "development": {
+      "path": "benchmarks/wave2d/development.jsonl",
+      "cases": 4,
+      "sha256": "18d30337abd65ae7fe1bb8ac3d55abbd14eb79f9b9e041eb92693d31b99deacc"
+    },
+    "sealed": {
+      "path": "evaluator_private/wave2d_sealed.jsonl",
+      "cases": 4,
+      "sha256": "c64f015cbcd2d8e4b72acde0041bc5f4f1997122379a1d47a5ace734590eac4d"
+    }
+  },
+  "source_status": "self-generated manufactured 2D wave cases; not part of the uploaded HF dataset"
+}

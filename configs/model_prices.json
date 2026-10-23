@@ -1,0 +1,13 @@
+{
+  "_note": "USD per 1M tokens, Bedrock on-demand us-east-1 unless noted. Edit when AWS confirms prices; null = unknown (tokens are still counted). 'cache_read'/'cache_write' apply to prompt-cache tokens.",
+  "us.anthropic.claude-sonnet-4-5-20250929-v1:0": {"input": 3.0, "output": 15.0, "cache_read": 0.3, "cache_write": 3.75,
+    "source": "https://pricepertoken.com/pricing-page/model/anthropic-claude-sonnet-4.5 ; https://www.cloudzero.com/blog/claude-on-aws-bedrock/", "verified_on_aws_page": false},
+  "us.anthropic.claude-opus-5-5": {"input": 4.0, "output": 20.0, "cache_read": 0.4, "cache_write": 5.0,
+    "source": "https://www.sentra.app/articles/claude-api-pricing (Claude API rate; Bedrock rate unconfirmed; cache rates assume the standard 0.1x / 1.25x multipliers)", "verified_on_aws_page": false},
+  "openai.gpt-oss-120b-1:0": {"input": 0.15, "output": 0.6, "cache_read": null, "cache_write": null,
+    "source": "https://portkey.ai/models/bedrock/openai.gpt-oss-120b-1:0", "verified_on_aws_page": false},
+  "us.openai.gpt-5.5": {"input": 5.0, "output": 30.0, "cache_read": 0.5, "cache_write": null,
+    "source": "https://cloudvisor.co/gpt-5-5-on-amazon-bedrock/ (matches OpenAI first-party; https://www.requesty.ai/models/bedrock/gpt-5.5-us-east-1 lists 5.50 / 33.00)", "verified_on_aws_page": false},
+  "us.openai.gpt-6.1-sol": {"input": null, "output": null, "cache_read": null, "cache_write": null,
+    "source": "no published price found", "verified_on_aws_page": false}
+}

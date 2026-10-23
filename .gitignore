@@ -1,0 +1,31 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+.pytest_cache/
+build/
+dist/
+
+# environments, caches, temporary files and credentials (.runtime/secrets)
+envs/
+.runtime/
+
+# evaluator-only material: sealed task files and the RSI-PDE Bench hidden test (secret seed, inputs,
+# references, per-case scores). Never commit any of it.
+evaluator_private/
+
+# large generated or third-party data: regenerate with the scripts (docs/rsi-pde-bench.md, docs/expanded-1001.md)
+data/
+datasets/
+external/
+tasks/
+runs/*
+!runs/.gitkeep
+containers/build/
+*.sif
+benchmarks/*.jsonl
+
+# local files
+bashrc
+Screenshot*
+PDE_Data_Inventory_Overleaf.pdf

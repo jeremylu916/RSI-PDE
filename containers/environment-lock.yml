@@ -1,0 +1,18 @@
+# RSI-PDE Bench v1: the pinned harness / evaluator environment (versions of envs/pde-rsi on 2026-10-23). The
+# numerical stack is pinned through PyPI wheels: envs/pde-rsi took scipy 1.15.3 from the Anaconda defaults channel,
+# which conda-forge does not carry.
+name: rsi-pde-bench
+channels:
+  - conda-forge
+  - nodefaults
+dependencies:
+  - python=3.13.5
+  - pip
+  - pip:
+      - numpy==2.1.3
+      - scipy==1.15.3
+      - matplotlib==3.10.*
+      - setuptools>=68
+      - datasets==5.1.0
+      - pyarrow==26.0.0
+      - huggingface_hub==2.2.0

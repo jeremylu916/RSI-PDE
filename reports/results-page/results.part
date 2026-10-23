@@ -1,0 +1,84 @@
+
+<main>
+<header class="top">
+  <div class="eyebrow">PDE-RSI · results as of 21 October 2026</div>
+  <h1>PDE-RSI Benchmark Results</h1>
+  <p class="lede">Each agent identifies an unknown PDE from 256 noisy samples and writes a solver. This page compares a single model request, your RSI harness (v1 and v2), and the native coding agents (Claude Code with Opus 5.5, Codex with GPT-5.5). Every model runs with the same task, evaluator, sandbox and budget. The second half lists every benchmark equation, split and setting.</p>
+  <nav class="toc" aria-label="Sections">
+    <a href="#headline">Headline: fresh hidden splits</a><a href="#fresh-pde">Per PDE: fresh splits</a>
+    <a href="#single">Inventory single runs</a><a href="#earlier">Earlier sealed splits</a>
+    <a href="#other">Benchmarks without a native agent</a><a href="#tex">tex suite equations</a>
+    <a href="#inventory">Inventory equations</a><a href="#manufactured">Manufactured suites</a><a href="#settings">Settings</a>
+  </nav>
+  <div class="defs">
+    <div class="def"><b>Single run</b><span>One model request with the task, contract and starting diagnostics. The returned solver is frozen as is: no feedback, retry or gate.</span></div>
+    <div class="def"><b>Single + repair</b><span>A single run that may fix one rule violation. If its one answer is rejected before running (code rules, program length) or cut off, that rejection is sent back once and one corrected answer is accepted. No solver runs before the repair.</span></div>
+    <div class="def"><b>RSI · v1 / v2</b><span>Gated rounds whose accepted candidates pass on their workflow and memory. v2 adds modular programs with patch edits, a per-part gate, and run-time self-check guidance.</span></div>
+    <div class="def"><b>Native agent</b><span>Claude Code or Codex in a sandbox with the same evaluator. Unlimited training runs, at most 30 gated validation submissions.</span></div>
+  </div>
+</header>
+
+<section id="headline">
+  <h2>Headline: fresh hidden splits</h2>
+  <p>These splits were created on 20 October, after the earlier sealed splits had been used to diagnose the harness. No configuration saw them. Each cell shows the mean cases passed per run over 3 runs, then the per-run results and the development cost per run.</p>
+  {{FRESH_SUMMARY_TEX}}
+  {{FRESH_SUMMARY_INV}}
+  <ul class="findings">
+    <li><b>Opus 5.5:</b> RSI v2 passes every hidden case in all six runs (20/20 and 12/12) and ties Claude Code on both suites. With one rule repair, the single run reaches 9.0 (v1) and 10.7 (v2) of 12 on the inventory suite, against 0 without it.</li>
+    <li><b>GPT-5.5:</b> RSI v2 improves on v1 on the tex suite (11.0 against 9.7) and costs less on both suites. It is still slightly behind Codex: 11.0 against 12.0 and 9.0 against 9.7. With three runs per configuration, these gaps are within the run-to-run spread.</li>
+    <li><b>The repair changes only the Opus inventory single runs.</b> All 18 other single runs had a valid first answer, so their strict and repaired results are the same.</li>
+  </ul>
+</section>
+
+<section id="fresh-pde">
+  <h2>Per PDE: fresh hidden splits</h2>
+  <p>The single-run columns show the single run with one rule repair; the strict single run differs only for Opus on the inventory suite, where it is 0 for every PDE.</p>
+  <p class="legend"><span><span class="swatch" style="--p:0"></span>0 passed</span><span><span class="swatch" style="--p:.5"></span>half</span><span><span class="swatch" style="--p:1"></span>all</span><span><span class="swatch best" style="--p:1"></span>outlined: best of the configurations for that model</span></p>
+  <h3>pde_benchmarks.tex, test3: cases passed over 3 runs (one case per PDE per run)</h3>
+  {{FRESH_TEX}}
+  <h3>PDE Data Inventory, inventory_test2: cases passed over 3 runs</h3>
+  {{FRESH_INV}}
+</section>
+
+<section id="single">
+  <h2>Why the strict Opus single run scores 0 on the inventory suite</h2>
+  <p>The inventory suite asks one answer to identify and solve 12 very different families, from 1-D Burgers to a 4-D elliptic problem. Every strict Opus answer was rejected before any code ran, and a rejected single run keeps the empty starting program, which fails every case:</p>
+  <ul>
+    <li>At the 64k-token output cap, all six answers (v1 and v2) were cut off while still writing.</li>
+    <li>At Opus 5.5's own 128k maximum, the v1 answers finished, but their programs had 29,137–32,261 characters. All but one broke the 30,000-character limit that every configuration has. The one under the limit, and one over it, also used <code>import time</code>, which the sandbox bans.</li>
+    <li>Under v2, one answer must write a separate part for every class. All three answers were cut off even at 128k.</li>
+  </ul>
+  <p>RSI and the native agents hit the same rules but recover by retrying. The single run with one rule repair gives the single run that one chance: it sends back only the rejection message, never a result. As a diagnostic outside the protocol, the three over-long v1 programs were also run exactly as written:</p>
+  {{DIAGNOSTIC}}
+  <p class="note">Run 2 also imports <code>time</code>, so it crashes when run, even with the length limit lifted. One answer can solve the whole suite, as run 1 shows, but not reliably.</p>
+</section>
+
+<section id="earlier">
+  <h2>Earlier sealed splits</h2>
+  <p>These are the matched studies of 18 and 20 October, before harness v2. The tex suite is scored on sealed test (17 cases) plus test2 (20 cases); the inventory suite on inventory_test (12 cases). These splits were later used to diagnose the harness, so the fresh splits above are the cleaner comparison.</p>
+  {{EARLY_SUMMARY_TEX}}
+  {{EARLY_SUMMARY_INV}}
+  <h3>pde_benchmarks.tex, test + test2: cases passed over 3 runs</h3>
+  {{EARLY_TEX}}
+  <h3>PDE Data Inventory, inventory_test: cases passed over 3 runs</h3>
+  {{EARLY_INV}}
+</section>
+
+<section id="other">
+  <h2>Benchmarks without a native agent</h2>
+  <p>These are earlier single-run vs RSI v1 comparisons with five models and one run per configuration. No native agent was run on them. The single run was redone on 20 October as one request.</p>
+  <h3>pde_benchmarks.tex variants: training · validation · sealed test passed (of 16 · 16 · 17)</h3>
+  {{OTHER_TEX}}
+  <p class="note">In the 100 % noise variant the measurement noise equals the signal RMS. In the hidden-time variant every case is posed as an evolution problem, and the agent must find out that steady cases do not change in time.</p>
+  <div class="two">
+    <div>
+      <h3>Student protocol (identify and solve): 16 public cases</h3>
+      {{OTHER_STUDENT}}
+    </div>
+    <div>
+      <h3>Manufactured code protocol (equation given), fine grid: public cases passed</h3>
+      {{OTHER_FINE}}
+    </div>
+  </div>
+</section>
+

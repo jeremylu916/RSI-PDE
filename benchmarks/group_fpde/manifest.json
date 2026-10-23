@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "benchmark_version": "group-fpde-v2",
+  "cases": 20,
+  "families": [
+    "fode",
+    "fpde_caputo",
+    "fpde_variable_order",
+    "fpde_variable_order_xt"
+  ],
+  "files": {
+    "evolution": {
+      "path": "benchmarks/group_fpde/evolution.jsonl",
+      "cases": 8,
+      "sha256": "9ab848d157730fbb1075a446849d94a39fe781239a23946c0a19f717f7d6a2b6"
+    },
+    "development": {
+      "path": "benchmarks/group_fpde/development.jsonl",
+      "cases": 8,
+      "sha256": "10c6fc7c781392eaab8bd646385f80818a505bdb9a8554fa9979054ae5e88d40"
+    },
+    "sealed": {
+      "path": "evaluator_private/group_fpde_sealed.jsonl",
+      "cases": 4,
+      "sha256": "c29a27ad23ed9e9065695d3bbd3d873582dfbd6702f7b422744a1dba83fa5590"
+    }
+  },
+  "source_status": "user-supplied group FPDE examples with self-generated order/power variants"
+}

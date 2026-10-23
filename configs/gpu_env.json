@@ -1,0 +1,4 @@
+{
+  "prefix": "/home/lu895/.conda/envs/2025.06-py313/muon",
+  "note": "Interpreter for GPU (PINN) sandbox solves only: Python 3.10, PyTorch 2.9.1+cu128, NumPy 2.2.6, SciPy 1.15.3. Used at the user's request on 2026-10-16 because installing CUDA PyTorch into envs/pde-rsi stalled on depot NFS (about 60 KB/s). Mounted read-only at /opt/gpu-env inside the sandbox."
+}

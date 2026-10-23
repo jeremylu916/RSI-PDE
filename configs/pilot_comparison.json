@@ -1,0 +1,18 @@
+{
+  "description": "v0.2 CLI defaults; protocol record, not a CLI config input",
+  "benchmark": "manufactured-v1",
+  "families": ["poisson", "heat", "convection_diffusion", "burgers", "caputo", "multi_term"],
+  "instances": {"evolution": 24, "development": 24, "sealed": 24},
+  "arms": ["single", "fixed", "rsi"],
+  "generations": 4,
+  "single_mode": "session",
+  "per_arm_budget": {"solver_calls": 240, "wall_seconds": 600, "cpu_seconds": 600, "cpu_threads": 1, "gpus": 0},
+  "per_task_limits": {"wall_seconds": 15, "memory_mb": 1024},
+  "acceptance": {"minimum_macro_relative_l2_gain": 0.005, "maximum_family_relative_regression": 0.05,
+                 "maximum_instance_relative_regression": 0.25, "permit_pass_rate_regression": false},
+  "sealed_evaluation": "explicit finalize after all agents are frozen; once per run",
+  "foundation_model": "none; deterministic numerical controls",
+  "project_root": "/depot/lin491/data/Binghang_project/PDE-RSI",
+  "conda_prefix": "/depot/lin491/data/Binghang_project/PDE-RSI/envs/pde-rsi",
+  "comparison_unit": "one initial development suite + four identical evolution/candidate development slots + reserved final suite per arm"
+}
