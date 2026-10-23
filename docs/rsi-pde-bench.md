@@ -1,4 +1,4 @@
-# RSI-PDE Bench v1
+# RSI-PDEbench v1
 
 A benchmark of recursive self-improvement on scientific code.
 

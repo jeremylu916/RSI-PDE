@@ -1,6 +1,6 @@
-"""RSI-PDE Bench v1: run an entrant, score it on the hidden test, report the headline numbers.
+"""RSI-PDEbench v1: run an entrant, score it on the hidden test, report the headline numbers.
 
-    python scripts/bench.py run --track tex --entrant pde-rsi-v2 --model opus55 --cores 42,44 --output runs/<name>
+    python scripts/bench.py run --entrant pde-rsi-v2 --model opus55 --cores 42,44,46,48,50,52 --output runs/<name>
     python scripts/bench.py run --track ext --entrant claude-code --model opus55 --cores 46,48 --output runs/<name>
     python scripts/bench.py score --runs runs/bench-v1-* --cores 42,44,46,...
     python scripts/bench.py report [--runs ...]
@@ -67,8 +67,28 @@ def run_harness(args, output):
     return status
 
 
+def run_all(args, output):
+    """An RSI-PDEbench run over all 42 templates: one sub-run per problem group, concurrently, two cores each."""
+    cores = args.cores.split(",")
+    if len(cores) < 2*len(TRACKS):
+        raise SystemExit(f"--track all needs {2*len(TRACKS)} cores (two per sub-run)")
+    output.mkdir(parents=True, exist_ok=False)
+    procs = {part: subprocess.Popen([sys.executable, __file__, "run", "--track", part, "--entrant", args.entrant,
+                                     "--model", args.model, "--cores", f"{cores[2*i]},{cores[2*i+1]}",
+                                     "--output", str(output/part)], cwd=PROJECT_ROOT,
+                                    stdout=open(output/f"{part}.log", "w"), stderr=subprocess.STDOUT)
+             for i, part in enumerate(TRACKS)}
+    status = max(proc.wait() for proc in procs.values())
+    (output/"bench_entry.json").write_text(json.dumps({"bench": BENCH_VERSION, "track": "all", "parts": list(TRACKS),
+                                                       "entrant": args.entrant, "model": args.model,
+                                                       "exit_status": status}, indent=2)+"\n")
+    return status
+
+
 def run(args):
     output = project_path(args.output)
+    if args.track == "all":
+        return run_all(args, output)
     if args.entrant == "pde-rsi-v2":
         status = run_harness(args, output)
     else:
@@ -173,7 +193,11 @@ def usage(run, arm):
 def score(args):
     cores = [int(c) for c in args.cores.split(",")]
     prices = load_prices()
-    for run in map(project_path, args.runs):
+    runs = []
+    for run in map(project_path, args.runs):  # a run over all templates is scored part by part
+        entry = json.loads((run/"bench_entry.json").read_text())
+        runs += [run/part for part in entry["parts"]] if entry.get("parts") else [run]
+    for run in runs:
         entry = json.loads((run/"bench_entry.json").read_text())
         track, model = entry["track"], MODELS[entry["model"]]
         out = {"bench": BENCH_VERSION, "track": track, "entrant": entry["entrant"], "model": entry["model"], "arms": {}}
@@ -203,14 +227,11 @@ def report(args):
     runs = [project_path(r) for r in args.runs] if args.runs else sorted(PROJECT_ROOT.glob("runs/bench-v1-*"))
     rows = []
     for run in runs:
-        path = run/"bench_score.json"
-        if not path.exists():
-            continue
-        item = json.loads(path.read_text())
-        for arm, a in item["arms"].items():
-            entrant = {"rsi": "pde-rsi-v2", "single": "single run"}.get(arm, arm)
-            rows.append({"track": item["track"], "model": item["model"], "entrant": entrant, "run": run.name, **a})
+        for path in [run/"bench_score.json", *sorted(run.glob("*/bench_score.json"))]:
+            if path.exists():
+                rows += report_rows(path)
     single = {(r["track"], r["model"]): r["hidden_pass_rate"] for r in rows if r["entrant"] == "single run"}
+
     for r in rows:
         base = single.get((r["track"], r["model"]))
         r["gain_over_single"] = None if base is None or r["entrant"] == "single run" else r["hidden_pass_rate"]-base
@@ -230,14 +251,22 @@ def report(args):
     print("\n".join(lines))
 
 
+def report_rows(path):
+    item = json.loads(path.read_text())
+    return [{"track": item["track"], "model": item["model"], "entrant": {"rsi": "pde-rsi-v2", "single": "single run"}.get(arm, arm),
+             "run": str(path.parent.relative_to(PROJECT_ROOT)), **a} for arm, a in item["arms"].items()]
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = parser.add_subparsers(dest="command", required=True)
     r = sub.add_parser("run")
-    r.add_argument("--track", choices=tuple(TRACKS), required=True)
+    r.add_argument("--track", choices=("all", *TRACKS), default="all",
+                   help="all (default): every template, as three concurrent sub-runs; or one problem group")
     r.add_argument("--entrant", choices=("pde-rsi-v2", "claude-code", "codex"), required=True)
     r.add_argument("--model", choices=tuple(MODELS), required=True)
-    r.add_argument("--cores", required=True, help="two OS cores: the two arms (harness) or evaluation and agent")
+    r.add_argument("--cores", required=True, help="two OS cores per sub-run: the two arms (harness) or evaluation "
+                                                   "and agent; six for --track all")
     r.add_argument("--output", required=True)
     s = sub.add_parser("score")
     s.add_argument("--runs", nargs="+", required=True)

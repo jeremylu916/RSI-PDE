@@ -1,9 +1,49 @@
 [
   {
+    "track": "inventory",
+    "model": "opus55",
+    "entrant": "claude-code",
+    "run": "runs/bench-v1-inventory-claude-code-opus55-20261023",
+    "curve": [
+      {
+        "submissions": 0,
+        "program": "87b70e1802930090",
+        "hidden_pass_rate": 0.0
+      },
+      {
+        "submissions": 1,
+        "program": "7851dc01de4d1be8",
+        "hidden_pass_rate": 0.9
+      }
+    ],
+    "hidden_pass_rate": 0.9,
+    "validation_pass_rate": 0.9166666666666666,
+    "dev_test_gap": 0.016666666666666607,
+    "metered_usage": {
+      "calls": 94,
+      "refused": 0,
+      "input": 214,
+      "cache_read": 4466477,
+      "cache_write": 297427,
+      "output": 94806,
+      "prompt_tokens": 4764118,
+      "caps": {
+        "calls": 400,
+        "prompt_tokens": 40000000,
+        "output_tokens": 600000
+      },
+      "exhausted": null
+    },
+    "wall_seconds": 3551.091284275055,
+    "cost_usd": 5.1707018,
+    "rounds": 1,
+    "gain_over_single": null
+  },
+  {
     "track": "tex",
     "model": "opus55",
     "entrant": "claude-code",
-    "run": "bench-v1-tex-claude-code-opus55-20261023",
+    "run": "runs/bench-v1-tex-claude-code-opus55-20261023",
     "curve": [
       {
         "submissions": 0,
@@ -57,6 +97,186 @@
     "wall_seconds": 1904.44939661026,
     "cost_usd": 2.9438804,
     "rounds": 5,
+    "gain_over_single": null
+  },
+  {
+    "track": "tex",
+    "model": "gpt55",
+    "entrant": "codex",
+    "run": "runs/bench-v1-tex-codex-gpt55-20261023",
+    "curve": [
+      {
+        "submissions": 0,
+        "program": "87b70e1802930090",
+        "hidden_pass_rate": 0.0
+      },
+      {
+        "submissions": 1,
+        "program": "0a082c3e2bacdf9f",
+        "hidden_pass_rate": 0.19
+      },
+      {
+        "submissions": 2,
+        "program": "392267a55fdfb0c8",
+        "hidden_pass_rate": 0.42
+      },
+      {
+        "submissions": 3,
+        "program": "392267a55fdfb0c8",
+        "hidden_pass_rate": 0.42
+      },
+      {
+        "submissions": 4,
+        "program": "392267a55fdfb0c8",
+        "hidden_pass_rate": 0.42
+      },
+      {
+        "submissions": 5,
+        "program": "392267a55fdfb0c8",
+        "hidden_pass_rate": 0.42
+      },
+      {
+        "submissions": 6,
+        "program": "392267a55fdfb0c8",
+        "hidden_pass_rate": 0.42
+      },
+      {
+        "submissions": 7,
+        "program": "392267a55fdfb0c8",
+        "hidden_pass_rate": 0.42
+      },
+      {
+        "submissions": 8,
+        "program": "392267a55fdfb0c8",
+        "hidden_pass_rate": 0.42
+      },
+      {
+        "submissions": 9,
+        "program": "0043ab4191b16be2",
+        "hidden_pass_rate": 0.43
+      },
+      {
+        "submissions": 10,
+        "program": "0043ab4191b16be2",
+        "hidden_pass_rate": 0.43
+      },
+      {
+        "submissions": 11,
+        "program": "18e065dc3d19d9c7",
+        "hidden_pass_rate": 0.43
+      },
+      {
+        "submissions": 12,
+        "program": "3c4bab43f8dd71bb",
+        "hidden_pass_rate": 0.43
+      },
+      {
+        "submissions": 13,
+        "program": "3c4bab43f8dd71bb",
+        "hidden_pass_rate": 0.43
+      },
+      {
+        "submissions": 14,
+        "program": "3c4bab43f8dd71bb",
+        "hidden_pass_rate": 0.43
+      },
+      {
+        "submissions": 15,
+        "program": "5cabbc92f288201d",
+        "hidden_pass_rate": 0.43
+      },
+      {
+        "submissions": 16,
+        "program": "b2ca7b234eeddd05",
+        "hidden_pass_rate": 0.43
+      },
+      {
+        "submissions": 17,
+        "program": "2b1dfdbf50842aa2",
+        "hidden_pass_rate": 0.43
+      },
+      {
+        "submissions": 18,
+        "program": "bc435f84c934bf55",
+        "hidden_pass_rate": 0.43
+      },
+      {
+        "submissions": 19,
+        "program": "254212f31cbba22e",
+        "hidden_pass_rate": 0.43
+      },
+      {
+        "submissions": 20,
+        "program": "254212f31cbba22e",
+        "hidden_pass_rate": 0.43
+      },
+      {
+        "submissions": 21,
+        "program": "254212f31cbba22e",
+        "hidden_pass_rate": 0.43
+      },
+      {
+        "submissions": 22,
+        "program": "254212f31cbba22e",
+        "hidden_pass_rate": 0.43
+      },
+      {
+        "submissions": 23,
+        "program": "254212f31cbba22e",
+        "hidden_pass_rate": 0.43
+      },
+      {
+        "submissions": 24,
+        "program": "a2f5f100e7c54475",
+        "hidden_pass_rate": 0.43
+      },
+      {
+        "submissions": 25,
+        "program": "ac04a36b8141df6d",
+        "hidden_pass_rate": 0.43
+      },
+      {
+        "submissions": 26,
+        "program": "0bbad911f62935ae",
+        "hidden_pass_rate": 0.43
+      },
+      {
+        "submissions": 27,
+        "program": "0bbad911f62935ae",
+        "hidden_pass_rate": 0.43
+      },
+      {
+        "submissions": 28,
+        "program": "0bbad911f62935ae",
+        "hidden_pass_rate": 0.43
+      },
+      {
+        "submissions": 29,
+        "program": "0bbad911f62935ae",
+        "hidden_pass_rate": 0.43
+      }
+    ],
+    "hidden_pass_rate": 0.43,
+    "validation_pass_rate": 0.45,
+    "dev_test_gap": 0.020000000000000018,
+    "metered_usage": {
+      "calls": 148,
+      "refused": 0,
+      "input": 942355,
+      "cache_read": 17300582,
+      "cache_write": 0,
+      "output": 68920,
+      "prompt_tokens": 18242937,
+      "caps": {
+        "calls": 400,
+        "prompt_tokens": 40000000,
+        "output_tokens": 600000
+      },
+      "exhausted": null
+    },
+    "wall_seconds": 3286.0983576774597,
+    "cost_usd": 15.429666,
+    "rounds": 29,
     "gain_over_single": null
   }
 ]

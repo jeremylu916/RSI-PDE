@@ -1,4 +1,4 @@
-# Datasheet: RSI-PDE Bench v1
+# Datasheet: RSI-PDEbench v1
 
 This datasheet follows the questions of Gebru et al., *Datasheets for Datasets*. The benchmark itself is described
 in `docs/rsi-pde-bench.md`.

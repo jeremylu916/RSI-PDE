@@ -241,7 +241,7 @@ def make_handler(meter, token, upstream):
             pass
 
         def refuse(self, status, message):
-            body = json.dumps({"message": f"RSI-PDE Bench: {message}", "__type": "ThrottlingException"}).encode()
+            body = json.dumps({"message": f"RSI-PDEbench: {message}", "__type": "ThrottlingException"}).encode()
             self.send_response(status)
             self.send_header("Content-Type", "application/json")
             self.send_header("Content-Length", str(len(body)))

@@ -1,4 +1,4 @@
-"""RSI-PDE Bench v1: what an entrant submits, what it may use, and how it is scored.
+"""RSI-PDEbench v1: what an entrant submits, what it may use, and how it is scored.
 
 An entrant is a self-improvement harness. For one track and one fixed foundation model it develops a solver
 program, solve(problem), under a fixed budget; it sees only the track's training and validation cases. The

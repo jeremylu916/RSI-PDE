@@ -25,9 +25,9 @@ All project storage belongs in `/depot/lin491/data/Binghang_project/PDE-RSI`,
 including the conda environment, downloaded packages, model caches, temporary
 files, and experiment artifacts.
 
-## RSI-PDE Bench v1
+## RSI-PDEbench v1
 
-[RSI-PDE Bench](docs/rsi-pde-bench.md) (2026-10-23) scores self-improvement harnesses.
+[RSI-PDEbench](docs/rsi-pde-bench.md) (2026-10-23) scores self-improvement harnesses.
 
 - **What runs:** for one track and one fixed model, a harness develops a solver under a fixed budget: 2 h, 400
   model calls, 40 M prompt and 600 k output tokens, and 30 gated validation submissions. Every model call goes

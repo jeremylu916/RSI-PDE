@@ -1,4 +1,4 @@
-"""RSI-PDE Bench evaluator: score a solver program on one split of one track, one sandboxed solve per case.
+"""RSI-PDEbench evaluator: score a solver program on one split of one track, one sandboxed solve per case.
 
 Public splits (bench-train, bench-val) can be scored by anyone with the repository, e.g. to check a solver before a
 run; the hidden split (bench-test) needs evaluator_private/bench (its secret, inputs and references).

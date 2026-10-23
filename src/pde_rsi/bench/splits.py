@@ -1,4 +1,4 @@
-"""RSI-PDE Bench splits: bench-train, bench-val (public) and bench-test (hidden), drawn from the expanded generator.
+"""RSI-PDEbench splits: bench-train, bench-val (public) and bench-test (hidden), drawn from the expanded generator.
 
 Every template of a track appears PER_TEMPLATE[split] times per split, with numbers from expanded.py's samplers
 (the same distribution as the 1001-case release), seeded by "rsi-pde-bench-v1:<split>". The hidden test seed also
@@ -107,7 +107,7 @@ def tasks(track, split, hide_time_dependence=False):
                                        max_seconds=seconds,
                                        relative_l2_tolerance=inv.TOLERANCES.get(template, inv.TOLERANCE)))
     if track == "tex" and hide_time_dependence:
-        raise ValueError("RSI-PDE Bench poses steady cases as steady (no hidden time dependence)")
+        raise ValueError("RSI-PDEbench poses steady cases as steady (no hidden time dependence)")
     return out
 
 
@@ -116,7 +116,7 @@ def bench_cases(track, split, noise_fraction, hide_time_dependence=False):
     from .. import pdebench as pb
     from .. import pdebench_ext as px
     if split not in SPLIT_NAMES:
-        raise ValueError(f"RSI-PDE Bench splits are {tuple(SPLIT_NAMES)}")
+        raise ValueError(f"RSI-PDEbench splits are {tuple(SPLIT_NAMES)}")
     split = SPLIT_NAMES[split]
     items = sorted(tasks(track, split, hide_time_dependence),
                    key=lambda t: hashlib.sha256(f"{BENCH_VERSION}:{t.task_id}".encode()).hexdigest())

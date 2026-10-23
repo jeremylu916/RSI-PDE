@@ -1,4 +1,4 @@
-"""RSI-PDE Bench step 2: difficulty calibration of the 1001 expanded cases with fixed (non-LLM) probe solvers.
+"""RSI-PDEbench step 2: difficulty calibration of the 1001 expanded cases with fixed (non-LLM) probe solvers.
 
 Each probe is a frozen solver program from an earlier run (harness v2 RSI, Claude Code, Codex, code-protocol RSI).
 No model is called. Every probe solves every case of its track in the sandbox, and data/bench/calibration/
