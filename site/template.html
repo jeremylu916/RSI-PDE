@@ -318,9 +318,9 @@ function table(node, head, rows, numeric = []) {
 
 // ------------------------------------------------ hero tiles, budget, tracks
 (() => {
-  const t = DATA.tracks, total = Object.values(t).reduce((a, x) => a + x.train + x.val + x.test, 0);
+  const t = DATA.tracks;
   const hidden = Object.values(t).reduce((a, x) => a + x.test, 0);
-  const tiles = [[`${total}`, "bench cases"], [`${hidden}`, "hidden-test cases"], [`${Object.values(t).reduce((a, x) => a + x.templates, 0)}`, "problem templates"], ["2 h", "per run, one model"]];
+  const tiles = [[`${DATA.bench_cases}`, "bench cases"], [`${hidden}`, "hidden-test cases"], [`${Object.values(t).reduce((a, x) => a + x.templates, 0)}`, "problem templates"], ["2 h", "per run, one model"]];
   for (const [v, l] of tiles) { const d = el("div", { class: "tile" }); d.append(el("div", { class: "v" }, v), el("div", { class: "l" }, l)); $("#tiles").append(d); }
   table($("#budget"), ["Resource", "Cap"], DATA.budget.map(b => [b[0], b[1]]), [1]);
   for (const [key, x] of Object.entries(t)) {

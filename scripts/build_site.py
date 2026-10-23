@@ -8,6 +8,7 @@ no hidden-test case, seed, input or per-case result. Publish with: python script
 from datetime import datetime, timezone
 import json
 
+from pde_rsi import expanded as X
 from pde_rsi.bench.spec import BUDGET, PER_TEMPLATE, TRACKS
 from pde_rsi.bench.splits import HARDENED
 from pde_rsi.storage import PROJECT_ROOT
@@ -94,7 +95,8 @@ def main():
               ["Output tokens", f"{BUDGET['output_tokens']/1e3:.0f} k"],
               ["Validation submissions", f"{BUDGET['validation_submissions']}"],
               ["Solver sandbox", "1 core, a GPU share, the case's time limit"]]
-    data = {"tracks": tracks(), "budget": budget, "probes": PROBES, "calibration": overall,
+    data = {"tracks": tracks(), "bench_cases": len(X.tex_cases()+X.ext_cases()+X.inventory_cases()+X.manufactured_tasks()),
+            "budget": budget, "probes": PROBES, "calibration": overall,
             "calibration_cases": cases, "templates": templates, "entrants": ENTRANTS, "results": results(),
             "planned_runs": 18, "earlier": EARLIER,
             "results_note": "One seed per entrant (2026-10-23). Each harness run also yields the single-run entrant "
