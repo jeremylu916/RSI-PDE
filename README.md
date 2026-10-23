@@ -42,6 +42,9 @@ files, and experiment artifacts.
   split) became public with this repository. They are retired, and only the bench's secret hidden test is held out
   ([details](docs/rsi-pde-bench.md#retired-splits-public-since-2026-10-23)).
 
+Outside the original cluster, set `PDE_RSI_PROJECT_ROOT` to your clone. Set `PDE_RSI_GPU_ENV` to the solver
+interpreter, or edit `configs/gpu_env.json`; `containers/` pins both environments.
+
 ```bash
 python scripts/bench.py run --track tex --entrant pde-rsi-v2 --model opus55 --cores 42,44 --output runs/bench-v1-...
 python scripts/bench.py score --runs runs/bench-v1-* --cores ...   # hidden test, every round

@@ -244,6 +244,7 @@ footer { padding: 36px 0 60px; color: var(--muted); font-size: 14px; border-top:
     on a GPU node with bubblewrap. The maintainers score submissions on the hidden test.</p>
 <pre>git clone https://github.com/jeremylu916/RSI-PDE.git &amp;&amp; cd RSI-PDE
 pip install -e .
+export PDE_RSI_PROJECT_ROOT=$PWD   # the code defaults to the original cluster path
 # score a solver on a public split (training or validation)
 rsi-pde-bench-eval solver.py --track tex --split bench-val
 # run a built-in entrant: harness v2, Claude Code or Codex
